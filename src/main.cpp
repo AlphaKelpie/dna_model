@@ -1,3 +1,4 @@
+#include <iostream>
 #include <Eigen/Dense>
 
 using Eigen::MatrixXd;
@@ -16,11 +17,11 @@ double constexpr omega_0 = 2.217594814298678;
 
 
 // common length of the rigid rod
-double constexpr h_0 = 2 * sigma_0 * std::sin(omega_0 / 2);
+double constexpr h_0 = 1.790326582710125;
 // equilibrium distance between basis (nm)
-double constexpr l_0 = std::sqrt(2 * sigma_0*sigma_0 * (1 - std::cos(phi_0)) + base*base);
+double constexpr l_0 = 0.705383591565685;
 // equilibrium angle between basis (radiants)
-double constexpr theta_0 = std::acos((2 * sigma_0*sigma_0 * (1 - std::cos(phi_0)) * std::cos(phi_0) + base*base) / (2 * sigma_0*sigma_0 * (1 - std::cos(phi_0)) + base*base));
+double constexpr theta_0 = 0.5483452644857695;
 // coordinates in eigen
 MatrixXd const d = (MatrixXd(3, 1) << 0, 0, base).finished();
 
@@ -30,12 +31,17 @@ struct Coordinates {
   T x_;
   T y_;
   T z_;
+
+  Coordinates(T x, T y, T z) : x_(x), y_(y), z_(z) {}
+
+  void print() const {
+    std::cout << "(" << x_ << " " << y_ << " " << z_ << ")\n";
+  }
 };
 
 
 template <typename T>
-MatrixXd rotation_matrix(Angle theta, Angle phi, MatrixXd const& r) {
-  T phi = phi.tao_;
+MatrixXd rotation_matrix(T theta, T phi, MatrixXd const& r) {
   T c_phi = std::cos(phi);
   T s_phi = std::sin(phi);
   MatrixXd z_axis(3, 3);
@@ -43,9 +49,8 @@ MatrixXd rotation_matrix(Angle theta, Angle phi, MatrixXd const& r) {
             s_phi, c_phi, 0,
             0, 0, 1;
 
-  T theta = theta.tao_;
-  T c_theta = std::cos(tao);
-  T s_theta = std::sin(tao);
+  T c_theta = std::cos(theta);
+  T s_theta = std::sin(theta);
   MatrixXd x_axis(3, 3);
   x_axis << 1, 0, 0,
             0, c_theta, -s_theta,
@@ -63,7 +68,7 @@ class Base {
   // twist angle
   T psi_;
   // coordinates
-  Coordinates<T> coordinates_;
+  Coordinates<T> coordinates_ = {0, 0, 0};
 
   public:
   Base(T theta, T phi, T psi) : theta_(theta), phi_(phi), psi_(psi) {}
@@ -76,8 +81,12 @@ class Base {
 
   Coordinates<T> coordinates() const { return coordinates_; }
 
-  MatrixXd coordinates(MatrixXd const& r, Coordinates const& c) {
-    MatritxXd const rotation = rotation_matrix<T>(theta_, phi_, r);
+  void set_coordinates(Coordinates<T> const& c) {
+    coordinates_ = c;
+  }
+
+  MatrixXd calculate_coordinates(MatrixXd const& r, Coordinates<T> const& c) {
+    MatrixXd const rotation = rotation_matrix<T>(theta_, phi_, r);
     coordinates_.x_ = rotation(0, 0) + c.x_;
     coordinates_.y_ = rotation(1, 0) + c.y_;
     coordinates_.z_ = rotation(2, 0) + c.z_;
@@ -85,4 +94,19 @@ class Base {
   }
 };
 
-
+int main() {
+  Base<double> b_1(0., 0., 0.);
+  auto const b_1_coo = b_1.coordinates();
+  Base<double> b_2(0., 0., 0.);
+  {
+    Coordinates<double> const b_2_coo = {0, 0, base};
+    b_2.set_coordinates(b_2_coo);
+  }
+  auto const b_2_coo = b_2.coordinates();
+  Base<double> b_3(0.3, 0., 0.);
+  auto const b_3_m = b_3.calculate_coordinates(MatrixXd::Identity(3, 3), b_2_coo);
+  auto const b_3_coo = b_3.coordinates();
+  b_1_coo.print();
+  b_2_coo.print();
+  b_3_coo.print();
+}
