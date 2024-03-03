@@ -1,4 +1,6 @@
 #include <vector>
+#include <fstream>
+#include <iomanip>
 
 #include "coordinates.hpp"
 #include "base.hpp"
@@ -65,4 +67,25 @@ int main() {
     std::cout << "\n\n";
   }
   std::cout << energy(dna) << '\n';
+
+  // Save central, p, and q coordinates of Base in separate files
+  std::ofstream c_file("./file_c.txt");
+  std::ofstream p_file("./file_p.txt");
+  std::ofstream q_file("./file_q.txt");
+
+  if (c_file.is_open() && p_file.is_open() && q_file.is_open()) {
+    c_file << std::fixed << std::setprecision(4);
+    p_file << std::fixed << std::setprecision(4);
+    q_file << std::fixed << std::setprecision(4);
+    for (auto const& b : dna) {
+      c_file << b.central().x_ << '\t' << b.central().y_ << '\t' << b.central().z_ << '\n';
+      p_file << b.p().x_ << '\t' << b.p().y_ << '\t' << b.p().z_ << '\n';
+      q_file << b.q().x_ << '\t' << b.q().y_ << '\t' << b.q().z_ << '\n';
+    }
+    c_file.close();
+    p_file.close();
+    q_file.close();
+  } else {
+    std::cerr << "Failed to open file for writing.\n";
+  }
 }
