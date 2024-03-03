@@ -40,6 +40,15 @@ struct Coordinates {
 
   Coordinates(T x, T y, T z) : x_(x), y_(y), z_(z) {}
 
+  T operator-(Coordinates<T> const& c) const {
+    return x_ - c.x_ + y_ - c.y_ + z_ - c.z_;
+  }
+
+  T operator&&(Coordinates<T> const& c) const {
+    return std::sqrt(std::pow(x_ - c.x_, 2) + std::pow(y_ - c.y_, 2)
+                      + std::pow(z_ - c.z_, 2));
+  }
+
   void print() const {
     std::cout << "(" << x_ << " " << y_ << " " << z_ << ")\n";
   }
@@ -126,6 +135,34 @@ class Base {
   }
 };
 
+template <typename T>
+double bonding_energy(Coordinates<T> const& now, Coordinates<T> const& before) {
+  return .5 * k_bond * std::pow((now && before) - l_0, 2);
+}
+
+template <typename T>
+double bending_energy(Coordinates<T> const& now, Coordinates<T> const& before,
+                      Coordinates<T> const& after) {
+  T const theta = std::acos((now - before) / (now && before)
+                            * (after - now) / (after && now));
+  return .5 * k_bend * std::pow(theta - theta_0, 2);
+}
+
+template <typename T>
+double energy(std::vector<Base<T>> const& dna) {
+  double energy = 0.;
+  for (short int i = 1; i != n; ++i) {
+    // bonding energy
+    energy = bonding_energy<T>(dna[i].p(), dna[i-1].p())
+           + bonding_energy<T>(dna[i].q(), dna[i-1].q());
+    // bending energy
+    if (i == n-1) { continue; }
+    energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
+            + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
+  }
+  return energy;
+}
+
 int main() {
   std::vector<Base<double>> dna;
   dna.push_back(Base<double>(0., 0., 0.));
@@ -143,4 +180,5 @@ int main() {
     b.q().print();
     std::cout << "\n\n";
   }
+  std::cout << energy(dna) << '\n';
 }
