@@ -1,26 +1,28 @@
 #include <iostream>
+#include <cmath>
+#include <vector>
 #include <Eigen/Dense>
 
 using Eigen::MatrixXd;
 
 // number of basis
-int constexpr n = 10;
+int constexpr n = 11;
 
-// distance between basis (nm)
+// vertical distance between basis (nm)
 double constexpr base = 0.34;
-// distance between elix (nm)
+// distance between elix and backbone structure (nm)
 double constexpr sigma_0 = 1.;
-// angle between basis (radiants)
-double constexpr phi_0 = 0.6283185307179586;
-// angle between elix (radiants)
+// angle between basis (radiants) (36d)
+double constexpr psi_0 = 0.6283185307179586;
+// angle between P and Q elixes (radiants) (~127.06d)
 double constexpr omega_0 = 2.217594814298678;
 
 
-// common length of the rigid rod
+// common length of the rigid rod between P and Q elixes (nm)
 double constexpr h_0 = 1.790326582710125;
-// equilibrium distance between basis (nm)
+// equilibrium distance between basis of the same elix (nm)
 double constexpr l_0 = 0.705383591565685;
-// equilibrium angle between basis (radiants)
+// equilibrium angle between basis of the same elix (radiants) (~31.4d)
 double constexpr theta_0 = 0.5483452644857695;
 // coordinates to calculate center coordinates
 MatrixXd const d = (MatrixXd(3, 1) << 0, 0, base).finished();
@@ -80,7 +82,9 @@ class Base {
   Coordinates<T> q_ = q1;
 
   public:
-  Base(T theta, T phi, T psi) : theta_(theta), phi_(phi), psi_(psi) {}
+  Base(T theta, T phi, T psi) : theta_{std::fmod(theta, 2*M_PI)},
+                                phi_{std::fmod(phi, 2*M_PI)},
+                                psi_{std::fmod(psi, 2*M_PI)} {}
 
   T theta() const { return theta_; }
 
@@ -94,9 +98,9 @@ class Base {
 
   Coordinates<T> q() const { return q_; }
 
-  void set_central_coordinates(Coordinates<T> const& coordinates) {
-    central_ = coordinates;
-  }
+  // void set_central_coordinates(Coordinates<T> const& coordinates) {
+  //   central_ = coordinates;
+  // }
 
   MatrixXd calculate_coordinates(MatrixXd const& previous_rotation, Coordinates<T> const& previous_coordinates) {
     MatrixXd const rotation = rotation_matrix<T>(theta_, phi_, previous_rotation);
@@ -120,31 +124,20 @@ class Base {
 };
 
 int main() {
-  Base<double> b_1(0., 0., 0.);
-  auto const b_1_c = b_1.central();
-  Base<double> b_2(0., 0., 0.);
-  {
-    // Coordinates<double> const b_2_coo = {0, 0, base};
-    // b_2.set_central_coordinates(b_2_coo);
+  std::vector<Base<double>> dna;
+  dna.push_back(Base<double>(0., 0., 0.));
+  Coordinates<double> central_previous_coordinates = {0, 0, 0};
+  MatrixXd previous_rotation_matrix = MatrixXd::Identity(3, 3);
+  for (short int i = 1; i != n; ++i) {
+    Base<double> b(0., 0., i*psi_0);
+    previous_rotation_matrix = b.calculate_coordinates(previous_rotation_matrix, central_previous_coordinates);
+    central_previous_coordinates = b.central();
+    dna.push_back(b);
   }
-  b_2.calculate_coordinates(MatrixXd::Identity(3, 3), b_1_c);
-  auto const b_2_c = b_2.central();
-  Base<double> b_3(0., 0., 0.);
-  auto const b_3_m = b_3.calculate_coordinates(MatrixXd::Identity(3, 3), b_2_c);
-  auto const b_3_c = b_3.central();
-  b_1_c.print();
-  auto const b_1_p = b_1.p();
-  b_1_p.print();
-  auto const b_1_q = b_1.q();
-  b_1_q.print();
-  b_2_c.print();
-  auto const b_2_p = b_2.p();
-  b_2_p.print();
-  auto const b_2_q = b_2.q();
-  b_2_q.print();
-  b_3_c.print();
-  auto const b_3_p = b_3.p();
-  b_3_p.print();
-  auto const b_3_q = b_3.q();
-  b_3_q.print();
+  for (auto const& b : dna) {
+    b.central().print();
+    b.p().print();
+    b.q().print();
+    std::cout << "\n\n";
+  }
 }
