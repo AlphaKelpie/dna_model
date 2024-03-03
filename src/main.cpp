@@ -16,6 +16,10 @@ double constexpr sigma_0 = 1.;
 double constexpr psi_0 = 0.6283185307179586;
 // angle between P and Q elixes (radiants) (~127.06d)
 double constexpr omega_0 = 2.217594814298678;
+// constant for bonding energy (pN/nm)
+double constexpr k_bond = 1000;
+// constant for bending energy (pN*nm)
+double constexpr k_bend = 7000;
 
 
 // common length of the rigid rod between P and Q elixes (nm)
@@ -46,25 +50,6 @@ Coordinates<double> const p1 = {sigma_0, 0, 0};
 // q1 coordinates
 Coordinates<double> const q1 = {sigma_0*std::cos(omega_0), sigma_0*std::sin(omega_0), 0};
 
-
-template <typename T>
-MatrixXd rotation_matrix(T theta, T phi, MatrixXd const& r) {
-  T c_phi = std::cos(phi);
-  T s_phi = std::sin(phi);
-  MatrixXd z_axis(3, 3);
-  z_axis << c_phi, -s_phi, 0,
-            s_phi, c_phi, 0,
-            0, 0, 1;
-
-  T c_theta = std::cos(theta);
-  T s_theta = std::sin(theta);
-  MatrixXd x_axis(3, 3);
-  x_axis << 1, 0, 0,
-            0, c_theta, -s_theta,
-            0, s_theta, c_theta;
-  
-  return r * z_axis * x_axis;
-}
 
 template <typename T>
 class Base {
@@ -102,8 +87,26 @@ class Base {
   //   central_ = coordinates;
   // }
 
+  MatrixXd rotation_matrix() {
+    T c_phi = std::cos(phi_);
+    T s_phi = std::sin(phi_);
+    MatrixXd z_axis(3, 3);
+    z_axis << c_phi, -s_phi, 0,
+              s_phi, c_phi, 0,
+              0, 0, 1;
+
+    T c_theta = std::cos(theta_);
+    T s_theta = std::sin(theta_);
+    MatrixXd x_axis(3, 3);
+    x_axis << 1, 0, 0,
+              0, c_theta, -s_theta,
+              0, s_theta, c_theta;
+
+    return z_axis * x_axis;
+  }
+
   MatrixXd calculate_coordinates(MatrixXd const& previous_rotation, Coordinates<T> const& previous_coordinates) {
-    MatrixXd const rotation = rotation_matrix<T>(theta_, phi_, previous_rotation);
+    MatrixXd const rotation = previous_rotation * this->rotation_matrix();
     // central coordinates
     MatrixXd const c_m = rotation * d;
     central_.x_ = previous_coordinates.x_ + c_m(0, 0);
