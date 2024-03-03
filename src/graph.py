@@ -26,12 +26,13 @@ q_z = q_data[:, 2]
 
 # Plot the coordinates
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot(c_x, c_y, c_z, c='r', linewidth=2, marker="o", markersize=5, label='Backbones')
-ax.plot(p_x, p_y, p_z, c='g', linewidth=2, marker="o", markersize=5, label='P chain')
-ax.plot(q_x, q_y, q_z, c='b', linewidth=2, marker="o", markersize=5, label='Q chain')
+ax = fig.add_subplot(projection='3d')
+ax.plot(p_x, p_y, p_z, c='g', linewidth=2, marker="o", markersize=5, alpha=.2, label='P chain')
+ax.plot(q_x, q_y, q_z, c='b', linewidth=2, marker="o", markersize=5, alpha=.2, label='Q chain')
+# ax.plot(c_x, c_y, c_z, c='r', linewidth=2, marker="o", markersize=5, alpha=.2, label='Backbones')
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ax.legend()
+ax.axis('equal')
 plt.show()
