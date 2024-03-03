@@ -12,8 +12,16 @@ struct Coordinates {
 
   Coordinates(T x, T y, T z) : x_(x), y_(y), z_(z) {}
 
-  T operator-(Coordinates<T> const& c) const {
-    return x_ - c.x_ + y_ - c.y_ + z_ - c.z_;
+  Coordinates<T> operator-(Coordinates<T> const& c) const {
+    return {x_ - c.x_, y_ - c.y_, z_ - c.z_};
+  }
+
+  Coordinates<T> operator/(T const& d) const {
+    return {x_ / d, y_ / d, z_ / d};
+  }
+
+  T operator*(Coordinates<T> const& c) const {
+    return x_ * c.x_ + y_ * c.y_ + z_ * c.z_;
   }
 
   T operator&&(Coordinates<T> const& c) const {
