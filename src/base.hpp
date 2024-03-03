@@ -23,7 +23,8 @@ MatrixXd const d = (MatrixXd(3, 1) << 0, 0, base).finished();
 // p1 coordinates
 Coordinates<double> const p1 = {sigma_0, 0, 0};
 // q1 coordinates
-Coordinates<double> const q1 = {sigma_0*std::cos(omega_0), sigma_0*std::sin(omega_0), 0};
+Coordinates<double> const q1 = {sigma_0*std::cos(omega_0),
+                                sigma_0*std::sin(omega_0), 0};
 
 template <typename T>
 class Base {
@@ -57,10 +58,6 @@ class Base {
 
   Coordinates<T> q() const { return q_; }
 
-  // void set_central_coordinates(Coordinates<T> const& coordinates) {
-  //   central_ = coordinates;
-  // }
-
   MatrixXd rotation_matrix() {
     T c_phi = std::cos(phi_);
     T s_phi = std::sin(phi_);
@@ -79,7 +76,8 @@ class Base {
     return z_axis * x_axis;
   }
 
-  MatrixXd calculate_coordinates(MatrixXd const& previous_rotation, Coordinates<T> const& previous_coordinates) {
+  MatrixXd calculate_coordinates(MatrixXd const& previous_rotation,
+                                Coordinates<T> const& previous_coordinates) {
     MatrixXd const rotation = previous_rotation * this->rotation_matrix();
     // central coordinates
     MatrixXd const c_m = rotation * d;
@@ -87,12 +85,17 @@ class Base {
     central_.y_ = previous_coordinates.y_ + c_m(1, 0);
     central_.z_ = previous_coordinates.z_ + c_m(2, 0);
     // p coordinates
-    MatrixXd const p_m = rotation * (MatrixXd(3, 1) << sigma_0*std::cos(psi_), sigma_0*std::sin(psi_), 0).finished();
+    MatrixXd const p_m = rotation * (MatrixXd(3, 1) << sigma_0*std::cos(psi_),
+                                                       sigma_0*std::sin(psi_),
+                                                       0).finished();
     p_.x_ = central_.x_ + p_m(0, 0);
     p_.y_ = central_.y_ + p_m(1, 0);
     p_.z_ = central_.z_ + p_m(2, 0);
     // q coordinates
-    MatrixXd const q_m = rotation * (MatrixXd(3, 1) << sigma_0*std::cos(psi_ + omega_0), sigma_0*std::sin(psi_ + omega_0), 0).finished();
+    MatrixXd const q_m = rotation *
+                         (MatrixXd(3, 1) << sigma_0*std::cos(psi_ + omega_0),
+                                            sigma_0*std::sin(psi_ + omega_0),
+                                            0).finished();
     q_.x_ = central_.x_ + q_m(0, 0);
     q_.y_ = central_.y_ + q_m(1, 0);
     q_.z_ = central_.z_ + q_m(2, 0);

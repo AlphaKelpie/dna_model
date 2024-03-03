@@ -53,7 +53,8 @@ int main() {
   MatrixXd previous_rotation_matrix = MatrixXd::Identity(3, 3);
   for (short int i = 1; i != n; ++i) {
     Base<double> b(0., 0., i*psi_0);
-    previous_rotation_matrix = b.calculate_coordinates(previous_rotation_matrix, central_previous_coordinates);
+    previous_rotation_matrix = b.calculate_coordinates(previous_rotation_matrix,
+                                    central_previous_coordinates);
     central_previous_coordinates = b.central();
     dna.push_back(b);
   }
