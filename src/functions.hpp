@@ -32,6 +32,22 @@ double bending_energy(Coordinates<T> const& now, Coordinates<T> const& before,
 }
 
 template <typename T>
+double core_energy(Coordinates<T> const& base, Coordinates<T> const& core) {
+  double const dist = double(base && core) - sigma_core;
+  return d_core * (std::exp(-2. * beta_core * dist) - 2. * std::exp(-beta_core * dist));
+}
+
+template <typename T>
+double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& over) {
+  double energy = 0.;
+  for (auto const& b : over) {
+    double const dist = double(base && b.central()) - sigma_exc;
+    energy += d_exc * std::exp(-2. * beta_exc * dist);
+  }
+  return energy;
+}
+
+template <typename T>
 double calculate_energy(std::vector<Base<T>> const& dna) {
   double energy = 0.;
   int const m = static_cast<int>(dna.size());
@@ -47,12 +63,37 @@ double calculate_energy(std::vector<Base<T>> const& dna) {
   return energy;
 }
 
+template <typename T>
+double calculate_energy_h(std::vector<Base<T>> const& dna, Coordinates<T> const& core) {
+  double energy = 0.;
+  int const m = static_cast<int>(dna.size());
+  energy += core_energy<T>(dna[0].central(), core);
+  std::vector<Base<T>> over(dna.begin() + 1 + n_nearby, dna.end());
+  energy += exclusion_energy<T>(dna[0].central(), over);
+  for (int i{1}; i != m; ++i) {
+    // bonding energy
+    energy += bonding_energy<T>(dna[i].p(), dna[(i-1)].p())
+            + bonding_energy<T>(dna[i].q(), dna[(i-1)].q());
+    // core energy
+    energy += core_energy<T>(dna[i].central(), core);
+    if (i >= m-1) { continue; }
+    // bending energy
+    energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
+            + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
+    if (i >= m-n_nearby-1) { continue; }
+    // exclusion energy
+    over.erase(over.begin());
+    energy += exclusion_energy<T>(dna[i].central(), over);
+  }
+  return energy;
+}
+
 // Save central, p, and q coordinates of Base in separate files
 template <typename T>
 void save_coordinates(std::vector<Base<T>> const& dna,
+                      std::string const& path = "./",
                       std::string const& phi = "0",
-                      std::string const& theta = "0",
-                      std::string const& path = "./") {
+                      std::string const& theta = "0") {
   std::ofstream c_file(path + phi + "_" + theta + "_c.txt");
   std::ofstream p_file(path + phi + "_" + theta + "_p.txt");
   std::ofstream q_file(path + phi + "_" + theta + "_q.txt");
@@ -84,8 +125,8 @@ To deg2rad(From const& deg) {
 // Save energy in a file
 template <typename T, typename U>
 void save_energy(std::span<double> const& energies,
-                 std::span<T> const& rows = std::array<int, 1>{0},
-                 std::span<U> const& columns = std::array<int, 1>{0},
+                 std::span<T> const rows,
+                 std::span<U> const columns,
                  std::string const& path = "./") {
   std::ofstream e_file(path + "energy.txt");
   if (e_file.is_open()) {
