@@ -11,14 +11,35 @@ double constexpr psi_0 = 0.6283185307179586;
 double constexpr omega_0 = 2.217594814298678;
 
 // parameters to calculate energy
+// bonding energy
 // constant for bonding energy (pN/nm)
 double constexpr k_bond = 1000;
 // equilibrium distance between basis of the same elix (nm)
 double constexpr l_0 = 0.705383591565685;
+
+// bending energy
 // constant for bending energy (pN*nm)
 double constexpr k_bend = 7000;
 // equilibrium angle between basis of the same elix (radiants) (~31.4d)
 double constexpr theta_0 = 0.5483452644857695;
+
+// core energy
+// equilibrium distance between the center of the core and each nodal point of the central backbone (nm)
+double constexpr sigma_core = 4.5;
+// width of the Morse potential well (nm^-1)
+double constexpr beta_core = 2.;
+// strength of the interaction between the core and the DNA (pNnm)
+double constexpr d_core = 10.;
+
+// exclusion energy
+// equilibrium distance between not nearby bases (nm)
+double constexpr sigma_exc = 2.1;
+// width of the Morse potential well exclusion energy (nm^-1)
+double constexpr beta_exc = 2.;
+// strength of the interaction between not nearby bases (pNnm)
+double constexpr d_exc = 1.;
+// number of bases to consider as nearby
+int constexpr n_nearby = 7;
 
 // physical constants
 // Boltzman constant (pN*nm/K)
