@@ -7,10 +7,6 @@
 
 using Eigen::MatrixXd;
 
-
-
-// common length of the rigid rod between P and Q elixes (nm)
-// double constexpr h_0 = 1.790326582710125;
 // coordinates to calculate center coordinates
 MatrixXd const d = (MatrixXd(3, 1) << 0, 0, base).finished();
 
