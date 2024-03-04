@@ -1,5 +1,12 @@
 #pragma once
 
+#include <vector>
+#include <fstream>
+#include <iomanip>
+#include <string>
+#include <array>
+#include <span>
+
 #include "parameters.hpp"
 #include "coordinates.hpp"
 #include "base.hpp"
@@ -42,17 +49,21 @@ double calculate_energy(std::vector<Base<T>> const& dna) {
 
 // Save central, p, and q coordinates of Base in separate files
 template <typename T>
-void save_coordinates(std::vector<Base<T>> const& dna) {
-  std::ofstream c_file("./file_c.txt");
-  std::ofstream p_file("./file_p.txt");
-  std::ofstream q_file("./file_q.txt");
+void save_coordinates(std::vector<Base<T>> const& dna,
+                      std::string const& phi = "0",
+                      std::string const& theta = "0",
+                      std::string const& path = "./") {
+  std::ofstream c_file(path + phi + "_" + theta + "_c.txt");
+  std::ofstream p_file(path + phi + "_" + theta + "_p.txt");
+  std::ofstream q_file(path + phi + "_" + theta + "_q.txt");
 
   if (c_file.is_open() && p_file.is_open() && q_file.is_open()) {
     c_file << std::fixed << std::setprecision(6);
     p_file << std::fixed << std::setprecision(6);
     q_file << std::fixed << std::setprecision(6);
     for (auto const& b : dna) {
-      c_file << b.central().x_ << '\t' << b.central().y_ << '\t' << b.central().z_ << '\n';
+      c_file << b.central().x_ << '\t' << b.central().y_ << '\t'
+             << b.central().z_ << '\n';
       p_file << b.p().x_ << '\t' << b.p().y_ << '\t' << b.p().z_ << '\n';
       q_file << b.q().x_ << '\t' << b.q().y_ << '\t' << b.q().z_ << '\n';
     }
@@ -60,6 +71,41 @@ void save_coordinates(std::vector<Base<T>> const& dna) {
     p_file.close();
     q_file.close();
   } else {
-    std::cerr << "Failed to open file for writing.\n";
+    std::cerr << "Failed to open coordinates file for writing.\n";
+  }
+}
+
+// Convert a degree angle to a radian angle
+template <typename To, typename From>
+To deg2rad(From const& deg) {
+  return (To)deg * M_PI / 180;
+}
+
+// Save energy in a file
+template <typename T, typename U>
+void save_energy(std::span<double> const& energies,
+                 std::span<T> const& rows = std::array<int, 1>{0},
+                 std::span<U> const& columns = std::array<int, 1>{0},
+                 std::string const& path = "./") {
+  std::ofstream e_file(path + "energy.txt");
+  if (e_file.is_open()) {
+    e_file << std::fixed << std::setprecision(3);
+    int const rows_size = static_cast<int>(rows.size());
+    int const columns_size = static_cast<int>(columns.size());
+    e_file << "index";
+    for (U const& col : columns) {
+      e_file << '\t' << col;
+    }
+    e_file << '\n';
+    for (int i = 0; i != rows_size; ++i) {
+      e_file << rows[i];
+      for (int j = 0; j != columns_size; ++j) {
+        e_file << '\t' << energies[i*columns_size + j];
+      }
+      e_file << '\n';
+    }
+    e_file.close();
+  } else {
+    std::cerr << "Failed to open energy file for writing.\n";
   }
 }
