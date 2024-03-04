@@ -1,7 +1,3 @@
-#include <vector>
-#include <fstream>
-#include <iomanip>
-
 #include "parameters.hpp"
 #include "coordinates.hpp"
 #include "base.hpp"
