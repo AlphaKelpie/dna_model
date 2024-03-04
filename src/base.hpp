@@ -2,21 +2,15 @@
 
 #include <Eigen/Dense>
 
+#include "parameters.hpp"
 #include "coordinates.hpp"
 
 using Eigen::MatrixXd;
 
-// vertical distance between basis (nm)
-double constexpr base = 0.34;
-// distance between elix and backbone structure (nm)
-double constexpr sigma_0 = 1.;
-// angle between basis (radiants) (36d)
-double constexpr psi_0 = 0.6283185307179586;
-// angle between P and Q elixes (radiants) (~127.06d)
-double constexpr omega_0 = 2.217594814298678;
+
 
 // common length of the rigid rod between P and Q elixes (nm)
-double constexpr h_0 = 1.790326582710125;
+// double constexpr h_0 = 1.790326582710125;
 // coordinates to calculate center coordinates
 MatrixXd const d = (MatrixXd(3, 1) << 0, 0, base).finished();
 
