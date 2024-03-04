@@ -35,8 +35,8 @@ int main() {
         dna.push_back(b);
       }
 
-      save_coordinates(dna, std::to_string(phi), std::to_string(theta),
-                       "./bend_writhe/");
+      save_coordinates(dna, "./bend_writhe/", std::to_string(phi),
+                       std::to_string(theta));
     }
   }
 
