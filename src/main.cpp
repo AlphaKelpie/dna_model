@@ -1,7 +1,6 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
-#include <random>
 
 #include "parameters.hpp"
 #include "coordinates.hpp"
@@ -12,11 +11,6 @@
 int constexpr n = 100;
 
 int main() {
-  // std::random_device rd;
-  // std::mt19937 gen(rd());
-  std::mt19937 gen(0);
-  std::uniform_int_distribution<int> oscillation(-1, 1);
-  std::uniform_real_distribution<double> uniform(0., 1.);
   std::cout << std::fixed << std::setprecision(6);
   std::vector<Base<double>> dna;
   dna.push_back(Base<double>(0., 0., 0.));
