@@ -54,3 +54,9 @@ double constexpr step = 0.017453292519943295;
 // parameter to wraping number
 // distance for absorbed bases (nm)
 double constexpr absorbed = 4.8;
+
+// parameters to rod energy 1
+// strength of the interaction between the rod and the DNA (pNnm)
+double constexpr d_rod_1 = 20.;
+// width of the Morse potential (nm^-1)
+double constexpr beta_rod_1 = 2.;
