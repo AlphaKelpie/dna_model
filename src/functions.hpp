@@ -87,6 +87,13 @@ double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna
 }
 
 template <typename T>
+double rod_energy_1(Coordinates<T> const& b, double const sigma_rod) {
+  Coordinates<T> const base = {b.x_, b.y_, 0.};
+  double const dist = double(base && base) - sigma_rod;
+  return d_rod_1 * (std::exp(-2. * beta_rod_1 * dist) - 2. * std::exp(-beta_rod_1 * dist));
+}
+
+template <typename T>
 double calculate_energy(std::vector<Base<T>> const& dna) {
   double energy = 0.;
   int const m = static_cast<int>(dna.size());
@@ -139,6 +146,37 @@ Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> cons
   double const wrapping_num = base * (size - 1) / (2. * M_PI * sigma_core);
   double const chirality_num = chirality<T>(nears, dna);
   return {energy, wrapping_num, chirality_num};
+}
+
+template <typename T>
+Output<T> calculate_rod_1(std::vector<Base<T>> const& dna, double const sigma_rod) {
+  double energy = 0.;
+  double wrapping_num = 0.;
+  int const m = static_cast<int>(dna.size());
+  // rod energy for the first base
+  energy += rod_energy_1<T>(dna[0].central(), sigma_rod);
+  std::vector<Base<T>> over(dna.begin() + 1 + n_nearby, dna.end());
+  // exclusion energy for the first base
+  energy += exclusion_energy<T>(dna[0].central(), over);
+  for (int i{1}; i != m; ++i) {
+    // bonding energy
+    energy += bonding_energy<T>(dna[i].p(), dna[(i-1)].p())
+            + bonding_energy<T>(dna[i].q(), dna[(i-1)].q());
+    // rod energy
+    energy += rod_energy_1<T>(dna[i].central(), sigma_rod);
+    if (i >= m-1) { continue; }
+    // bending energy
+    energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
+            + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
+    if (i >= m-n_nearby-1) { continue; }
+    // exclusion energy
+    over.erase(over.begin());
+    energy += exclusion_energy<T>(dna[i].central(), over);
+    if (i == 1) { continue; }
+    // calculate wrapping number
+    // 
+  }
+  return {energy, wrapping_num / (2. * M_PI), 0.};
 }
 
 // Save central, p, and q coordinates of Base in separate files
