@@ -50,3 +50,7 @@ double constexpr T = 300.;
 // parameters to Metropolis algorithm
 // step size
 double constexpr step = 0.017453292519943295;
+
+// parameter to wraping number
+// distance for absorbed bases (nm)
+double constexpr absorbed = 4.8;
