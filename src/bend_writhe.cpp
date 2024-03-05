@@ -9,6 +9,9 @@
 // number of basis
 int constexpr n = 100;
 
+// path
+std::string const path = "./bend_writhe/";
+
 int main() {
   std::cout << std::fixed << std::setprecision(6);
   
@@ -35,7 +38,7 @@ int main() {
         dna.push_back(b);
       }
 
-      save_coordinates(dna, "./bend_writhe/", std::to_string(phi),
+      save_coordinates(dna, path, std::to_string(phi),
                        std::to_string(theta));
     }
   }
@@ -74,6 +77,6 @@ int main() {
     }
   }
 
-  save_energy<double, int>(energies, phies_v, thetas, "./bend_writhe/");
+  save_energy<double, int>(energies, phies_v, thetas, path);
   std::cout << '\n';
 }
