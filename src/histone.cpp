@@ -6,14 +6,15 @@
 
 #include "tqdm.hpp"
 #include "coordinates.hpp"
+#include "output.hpp"
 #include "base.hpp"
 #include "functions.hpp"
 
 // evolution steps
-int constexpr epochs = 1000000;
+int constexpr epochs = 100000;
 
 // number of basis
-int constexpr n = 100;
+int constexpr n = 200;
 
 // coordinates of the histone (nm)
 Coordinates<double> const histone = {0., -4.5, 10.2};
@@ -22,13 +23,13 @@ int main() {
   // std::random_device rd;
   // std::mt19937 gen(rd());
   std::mt19937 gen(0);
-  std::uniform_int_distribution<int> random_angle(0, 3*(n-1));
+  std::uniform_int_distribution<int> random_angle(6, 3*(n-1));
   std::uniform_int_distribution<int> oscillation(0, 1);
   std::uniform_real_distribution<double> prob(0., 1.);
   std::cout << std::fixed << std::setprecision(6);
 
   std::vector<Base<double>> dna;
-  std::vector<double> energies;
+  std::vector<Output> parameters;
   dna.push_back(Base<double>(0., 0., 0.));
   dna.push_back(Base<double>(0., 0., psi_0));
   Coordinates<double> central_previous_coordinates = dna[0].central();
@@ -45,8 +46,8 @@ int main() {
     dna.push_back(b);
   }
   
-  double energy = calculate_energy_h(dna, histone);
-  energies.push_back(energy);
+  Output params = calculate_parameters(dna, histone);
+  parameters.push_back(params);
 
   for (int e : tq::trange(epochs)) {
     if (e % 1000 == 0) {
@@ -89,11 +90,11 @@ int main() {
         dna_new.push_back(b);
       }
     }
-    double const energy_new = calculate_energy_h(dna_new, histone);
-    energies.push_back(energy_new);
-    if (p(energy_new, energy) > prob(gen)) {
+    Output const params_new = calculate_parameters(dna_new, histone);
+    parameters.push_back(params_new);
+    if (p(params_new.e_, params.e_) > prob(gen)) {
       dna = std::move(dna_new);
-      energy = energy_new;
+      params = params_new;
     }
   }
 
@@ -101,6 +102,6 @@ int main() {
   std::vector<int> cicles(epochs);
   std::iota(cicles.begin(), cicles.end(), 0);
   std::array<int, 1> useless = {0};
-  save_energy<int, int>(energies, cicles, useless, "./histone_1/");
+  save_parameters<int, int>(parameters, cicles, useless, "./histone/");
   std::cout << '\n';
 }
