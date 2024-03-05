@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# File name
+FILE = "./histone/1000000_0_0"
 # Read coordinates from three different files
-c_file = "./file_c.txt"
-p_file = "./file_p.txt"
-q_file = "./file_q.txt"
+c_file = FILE + "_c.txt"
+p_file = FILE + "_p.txt"
+q_file = FILE + "_q.txt"
 
 # Read coordinates from file1
 c_data = np.loadtxt(c_file)
