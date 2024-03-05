@@ -9,6 +9,7 @@
 
 #include "parameters.hpp"
 #include "coordinates.hpp"
+#include "output.hpp"
 #include "base.hpp"
 
 
@@ -48,6 +49,11 @@ double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& 
 }
 
 template <typename T>
+int nearby(Coordinates<T> const& base, Coordinates<T> const& core) {
+  return (base && core) <= absorbed;
+}
+
+template <typename T>
 double calculate_energy(std::vector<Base<T>> const& dna) {
   double energy = 0.;
   int const m = static_cast<int>(dna.size());
@@ -64,18 +70,25 @@ double calculate_energy(std::vector<Base<T>> const& dna) {
 }
 
 template <typename T>
-double calculate_energy_h(std::vector<Base<T>> const& dna, Coordinates<T> const& core) {
+Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> const& core) {
   double energy = 0.;
+  int near = 0;
   int const m = static_cast<int>(dna.size());
+  // core energy for the first base
   energy += core_energy<T>(dna[0].central(), core);
   std::vector<Base<T>> over(dna.begin() + 1 + n_nearby, dna.end());
+  // exclusion energy for the first base
   energy += exclusion_energy<T>(dna[0].central(), over);
+  // if the first base is nearby
+  near += nearby<T>(dna[0].central(), core);
   for (int i{1}; i != m; ++i) {
     // bonding energy
     energy += bonding_energy<T>(dna[i].p(), dna[(i-1)].p())
             + bonding_energy<T>(dna[i].q(), dna[(i-1)].q());
     // core energy
     energy += core_energy<T>(dna[i].central(), core);
+    // if the base is nearby
+    near += nearby<T>(dna[i].central(), core);
     if (i >= m-1) { continue; }
     // bending energy
     energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
@@ -85,7 +98,8 @@ double calculate_energy_h(std::vector<Base<T>> const& dna, Coordinates<T> const&
     over.erase(over.begin());
     energy += exclusion_energy<T>(dna[i].central(), over);
   }
-  return energy;
+  double const wrapping_num = b * (near - 1) / (2. * M_PI * sigma_core);
+  return {energy, wrapping_num, 0.};
 }
 
 // Save central, p, and q coordinates of Base in separate files
@@ -124,29 +138,47 @@ To deg2rad(From const& deg) {
 
 // Save energy in a file
 template <typename T, typename U>
-void save_energy(std::span<double> const& energies,
+void save_parameters(std::span<Output> const& params,
                  std::span<T> const rows,
                  std::span<U> const columns,
                  std::string const& path = "./") {
   std::ofstream e_file(path + "energy.txt");
-  if (e_file.is_open()) {
+  std::ofstream w_file(path + "wrapping.txt");
+  std::ofstream c_file(path + "chirality.txt");
+  if (e_file.is_open() && w_file.is_open() && c_file.is_open()) {
     e_file << std::fixed << std::setprecision(3);
+    w_file << std::fixed << std::setprecision(3);
+    c_file << std::fixed << std::setprecision(3);
     int const rows_size = static_cast<int>(rows.size());
     int const columns_size = static_cast<int>(columns.size());
     e_file << "index";
+    w_file << "index";
+    c_file << "index";
     for (U const& col : columns) {
       e_file << '\t' << col;
+      w_file << '\t' << col;
+      c_file << '\t' << col;
     }
     e_file << '\n';
+    w_file << '\n';
+    c_file << '\n';
     for (int i = 0; i != rows_size; ++i) {
       e_file << rows[i];
+      w_file << rows[i];
+      c_file << rows[i];
       for (int j = 0; j != columns_size; ++j) {
-        e_file << '\t' << energies[i*columns_size + j];
+        e_file << '\t' << params[i*columns_size + j].e_;
+        w_file << '\t' << params[i*columns_size + j].w_;
+        c_file << '\t' << params[i*columns_size + j].c_;
       }
       e_file << '\n';
+      w_file << '\n';
+      c_file << '\n';
     }
     e_file.close();
+    w_file.close();
+    c_file.close();
   } else {
-    std::cerr << "Failed to open energy file for writing.\n";
+    std::cerr << "Failed to open parameters files for writing.\n";
   }
-}
+};
