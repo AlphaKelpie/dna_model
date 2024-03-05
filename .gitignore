@@ -33,3 +33,6 @@
 
 # System files
 .DS_Store
+
+# Prove files
+pr*
