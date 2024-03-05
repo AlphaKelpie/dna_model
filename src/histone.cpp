@@ -19,6 +19,9 @@ int constexpr n = 200;
 // coordinates of the histone (nm)
 Coordinates<double> const histone = {0., -4.5, 10.2};
 
+// path
+std::string const path = "./histone/";
+
 int main() {
   // std::random_device rd;
   // std::mt19937 gen(rd());
@@ -51,7 +54,7 @@ int main() {
 
   for (int e : tq::trange(epochs)) {
     if (e % 1000 == 0) {
-      save_coordinates(dna, "./histone/" + std::to_string(e) + "_");
+      save_coordinates(dna, path + std::to_string(e) + "_");
     }
     std::vector<Base<double>> dna_new{dna[0], dna[1]};
     previous_rotation_matrix = MatrixXd::Identity(3, 3);
@@ -98,10 +101,10 @@ int main() {
     }
   }
 
-  save_coordinates(dna, "./histone/" + std::to_string(epochs) + "_");
+  save_coordinates(dna, path + std::to_string(epochs) + "_");
   std::vector<int> cicles(epochs);
   std::iota(cicles.begin(), cicles.end(), 0);
   std::array<int, 1> useless = {0};
-  save_parameters<int, int>(parameters, cicles, useless, "./histone/");
+  save_parameters<int, int>(parameters, cicles, useless, path);
   std::cout << '\n';
 }
