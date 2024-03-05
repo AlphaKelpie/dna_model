@@ -48,6 +48,10 @@ class Base {
 
   Coordinates<T> q() const { return q_; }
 
+  void set_coordinates_c(Coordinates<T> const& c) {
+    central_ = c;
+  }
+
   MatrixXd rotation_matrix() {
     T c_phi = std::cos(phi_);
     T s_phi = std::sin(phi_);
