@@ -49,8 +49,41 @@ double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& 
 }
 
 template <typename T>
-int nearby(Coordinates<T> const& base, Coordinates<T> const& core) {
+bool nearby(Coordinates<T> const& base, Coordinates<T> const& core) {
   return (base && core) <= absorbed;
+}
+
+template <typename T>
+Coordinates<T> avg_norm(std::span<Coordinates<T>> const& coordinates) {
+  Coordinates<T> avg;
+  for (auto const& c : coordinates) {
+    avg += c;
+  }
+  avg = avg / coordinates.size();
+  return avg / (avg && avg);
+}
+
+template <typename T>
+double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna) {
+  std::vector<Coordinates<T>> m;
+  std::vector<Coordinates<T>> head;
+  std::vector<Coordinates<T>> tail;
+  int const size = static_cast<int>(indexs.size());
+  for (int i{0}; i != size/2; ++i) {
+    if (indexs[0] == 0) { continue; } // throw exception
+    m.push_back((dna[indexs[i]].central() - dna[indexs[i]-1].central())
+                % (dna[indexs[i]+1].central() - dna[indexs[i]].central()));
+    head.push_back(dna[indexs[i]].central());
+  }
+  int const r = size%2;
+  int const dna_size = static_cast<int>(dna.size());
+  for (int i{size/2 + r}; i != size; ++i) {
+    if (indexs[i] >= dna_size - 1) { continue; } // throw exception
+    m.push_back((dna[indexs[i - r]].central() - dna[indexs[i - r]-1].central())
+                % (dna[indexs[i - r]+1].central() - dna[indexs[i - r]].central()));
+    tail.push_back(dna[indexs[i - r]].central());
+  }
+  return (avg_norm<T>(m) * (avg_norm<T>(tail) - avg_norm<T>(head)));
 }
 
 template <typename T>
@@ -72,7 +105,7 @@ double calculate_energy(std::vector<Base<T>> const& dna) {
 template <typename T>
 Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> const& core) {
   double energy = 0.;
-  int near = 0;
+  std::vector<int> nears;
   int const m = static_cast<int>(dna.size());
   // core energy for the first base
   energy += core_energy<T>(dna[0].central(), core);
@@ -80,7 +113,9 @@ Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> cons
   // exclusion energy for the first base
   energy += exclusion_energy<T>(dna[0].central(), over);
   // if the first base is nearby
-  near += nearby<T>(dna[0].central(), core);
+  if (nearby<T>(dna[0].central(), core)) {
+    nears.push_back(0);
+  }
   for (int i{1}; i != m; ++i) {
     // bonding energy
     energy += bonding_energy<T>(dna[i].p(), dna[(i-1)].p())
@@ -88,7 +123,9 @@ Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> cons
     // core energy
     energy += core_energy<T>(dna[i].central(), core);
     // if the base is nearby
-    near += nearby<T>(dna[i].central(), core);
+    if (nearby<T>(dna[i].central(), core)) {
+      nears.push_back(i);
+    }
     if (i >= m-1) { continue; }
     // bending energy
     energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
@@ -98,8 +135,10 @@ Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> cons
     over.erase(over.begin());
     energy += exclusion_energy<T>(dna[i].central(), over);
   }
-  double const wrapping_num = b * (near - 1) / (2. * M_PI * sigma_core);
-  return {energy, wrapping_num, 0.};
+  int const size = static_cast<int>(nears.size());
+  double const wrapping_num = base * (size - 1) / (2. * M_PI * sigma_core);
+  double const chirality_num = chirality<T>(nears, dna);
+  return {energy, wrapping_num, chirality_num};
 }
 
 // Save central, p, and q coordinates of Base in separate files
@@ -137,6 +176,35 @@ To deg2rad(From const& deg) {
 }
 
 // Save energy in a file
+template <typename T, typename U>
+void save_energy(std::span<double> const& energies,
+                 std::span<T> const rows,
+                 std::span<U> const columns,
+                 std::string const& path = "./") {
+  std::ofstream e_file(path + "energy.txt");
+  if (e_file.is_open()) {
+    e_file << std::fixed << std::setprecision(3);
+    int const rows_size = static_cast<int>(rows.size());
+    int const columns_size = static_cast<int>(columns.size());
+    e_file << "index";
+    for (U const& col : columns) {
+      e_file << '\t' << col;
+    }
+    e_file << '\n';
+    for (int i = 0; i != rows_size; ++i) {
+      e_file << rows[i];
+      for (int j = 0; j != columns_size; ++j) {
+        e_file << '\t' << energies[i*columns_size + j];
+      }
+      e_file << '\n';
+    }
+    e_file.close();
+  } else {
+    std::cerr << "Failed to open energy file for writing.\n";
+  }
+};
+
+// Save parameter in a file
 template <typename T, typename U>
 void save_parameters(std::span<Output> const& params,
                  std::span<T> const rows,
