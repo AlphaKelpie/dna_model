@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iomanip>
 #include <random>
+#include <numeric>
 
 #include "tqdm.hpp"
 #include "coordinates.hpp"
@@ -89,15 +90,17 @@ int main() {
       }
     }
     double const energy_new = calculate_energy_h(dna_new, histone);
+    energies.push_back(energy_new);
     if (p(energy_new, energy) > prob(gen)) {
       dna = std::move(dna_new);
       energy = energy_new;
-      energies.push_back(energy);
     }
   }
 
   save_coordinates(dna, "./histone/" + std::to_string(epochs) + "_");
+  std::vector<int> cicles(epochs);
+  std::iota(cicles.begin(), cicles.end(), 0);
   std::array<int, 1> useless = {0};
-  save_energy<int, int>(energies, useless, useless, "./histone/");
+  save_energy<int, int>(energies, cicles, useless, "./histone_1/");
   std::cout << '\n';
 }
