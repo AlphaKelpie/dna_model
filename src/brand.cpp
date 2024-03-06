@@ -10,19 +10,30 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-// evolution steps
-int constexpr epochs = 1000;
+int main() {  
+  // number of basis
+  int n = 100;
+  // evolution steps
+  int epochs = 1000;
+  // path
+  std::string path = "./brand/";
+  // force on the z axis
+  double force = 0.;
+  // strength of the interaction
+  double d_dna;
+  // Read parameters from file
+  std::ifstream file("data_brand.txt");
+  if (file.is_open()) {
+    file >> n;
+    file >> epochs;
+    file >> path;
+    file >> force;
+    file >> d_dna;
+    file.close();
+  } else {
+    std::cerr << "Unable to open file\n";
+  }
 
-// number of basis
-int constexpr n = 100;
-
-// path
-std::string const path = "./brand/";
-
-// force
-double constexpr force = 0.;
-
-int main() {
   // std::random_device rd;
   // std::mt19937 gen(rd());
   std::mt19937 gen(0);
@@ -52,18 +63,20 @@ int main() {
 
   for (int i = 2; i != n; ++i) {
     Base<double> b(0., 0., i*psi_0);
-    A_previous_rotation_matrix = b.calculate_coordinates(A_previous_rotation_matrix,
-                                    A_central_previous_coordinates);
+    A_previous_rotation_matrix = b.calculate_coordinates(
+                                        A_previous_rotation_matrix,
+                                        A_central_previous_coordinates);
     A_central_previous_coordinates = b.central();
     A_dna.push_back(b);
     Base<double> c(0., 0., i*psi_0);
-    B_previous_rotation_matrix = c.calculate_coordinates(B_previous_rotation_matrix,
-                                    B_central_previous_coordinates);
+    B_previous_rotation_matrix = c.calculate_coordinates(
+                                        B_previous_rotation_matrix,
+                                        B_central_previous_coordinates);
     B_central_previous_coordinates = c.central();
     B_dna.push_back(c);
   }
   
-  Output params = calculate_branding(A_dna, B_dna, force);
+  Output params = calculate_branding(A_dna, B_dna, force, d_dna);
   parameters.push_back(params);
 
   for (int e : tq::trange(epochs)) {
@@ -82,13 +95,15 @@ int main() {
     for (int i = 2; i != n; ++i) {
       if (i != index_base_change) {
         Base<double> b(A_dna[i].theta(), A_dna[i].phi(), A_dna[i].psi());
-        A_previous_rotation_matrix = b.calculate_coordinates(A_previous_rotation_matrix,
-                                        A_central_previous_coordinates);
+        A_previous_rotation_matrix = b.calculate_coordinates(
+                                            A_previous_rotation_matrix,
+                                            A_central_previous_coordinates);
         A_central_previous_coordinates = b.central();
         A_dna_new.push_back(b);
         Base<double> c(B_dna[i].theta(), B_dna[i].phi(), B_dna[i].psi());
-        B_previous_rotation_matrix = c.calculate_coordinates(B_previous_rotation_matrix,
-                                        B_central_previous_coordinates);
+        B_previous_rotation_matrix = c.calculate_coordinates(
+                                            B_previous_rotation_matrix,
+                                            B_central_previous_coordinates);
         B_central_previous_coordinates = c.central();
         B_dna_new.push_back(c);
       } else {
@@ -122,18 +137,21 @@ int main() {
             break;  // gestire eccezione
         }
         Base<double> b(A_theta, A_phi, A_psi);
-        A_previous_rotation_matrix = b.calculate_coordinates(A_previous_rotation_matrix,
-                                        A_central_previous_coordinates);
+        A_previous_rotation_matrix = b.calculate_coordinates(
+                                            A_previous_rotation_matrix,
+                                            A_central_previous_coordinates);
         A_central_previous_coordinates = b.central();
         A_dna_new.push_back(b);
         Base<double> c(B_theta, B_phi, B_psi);
-        B_previous_rotation_matrix = c.calculate_coordinates(B_previous_rotation_matrix,
-                                        B_central_previous_coordinates);
+        B_previous_rotation_matrix = c.calculate_coordinates(
+                                            B_previous_rotation_matrix,
+                                            B_central_previous_coordinates);
         B_central_previous_coordinates = c.central();
         B_dna_new.push_back(c);
       }
     }
-    Output const params_new = calculate_branding(A_dna_new, B_dna_new, force);
+    Output const params_new = calculate_branding(A_dna_new, B_dna_new, force,
+                                                 d_dna);
     parameters.push_back(params_new);
     if (p(params_new.e_, params.e_) > prob(gen)) {
       A_dna = std::move(A_dna_new);
