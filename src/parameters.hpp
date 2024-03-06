@@ -73,5 +73,3 @@ double constexpr beta_rod_2 = 2.;
 double constexpr beta_dna = 0.8;
 // equilibrium distance between the two center backbones (nm)
 double constexpr sigma_dna = 2.1;
-// strength of the interaction between the two center backbones (pNnm)
-double constexpr d_dna = 0.7;
