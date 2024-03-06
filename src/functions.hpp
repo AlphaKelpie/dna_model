@@ -34,12 +34,13 @@ double bending_energy(Coordinates<T> const& now, Coordinates<T> const& before,
 
 template <typename T>
 double core_energy(Coordinates<T> const& base, Coordinates<T> const& core) {
-  double const dist = double(base || core) - sigma_core;
-  return d_core * (std::exp(-2. * beta_core * dist) - 2. * std::exp(-beta_core * dist));
+  double const exp = - beta_core * (double(base || core) - sigma_core);
+  return d_core * (std::exp(2. * exp) - 2. * std::exp(exp));
 }
 
 template <typename T>
-double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& over) {
+double exclusion_energy(Coordinates<T> const& base,
+                        std::vector<Base<T>> const& over) {
   double energy = 0.;
   for (auto const& b : over) {
     double const dist = double(base || b.central()) - sigma_exc;
@@ -64,7 +65,8 @@ Coordinates<T> avg_norm(std::span<Coordinates<T>> const& coordinates) {
 }
 
 template <typename T>
-double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna) {
+double chirality(std::vector<int> const& indexs,
+                 std::vector<Base<T>> const& dna) {
   std::vector<Coordinates<T>> m;
   std::vector<Coordinates<T>> head;
   std::vector<Coordinates<T>> tail;
@@ -79,8 +81,8 @@ double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna
   int const dna_size = static_cast<int>(dna.size());
   for (int i{size/2 + r}; i != size; ++i) {
     if (indexs[i] >= dna_size - 1) { continue; } // throw exception
-    m.push_back((dna[indexs[i - r]].central() - dna[indexs[i - r]-1].central())
-                % (dna[indexs[i - r]+1].central() - dna[indexs[i - r]].central()));
+    m.push_back((dna[indexs[i-r]].central() - dna[indexs[i-r]-1].central())
+                % (dna[indexs[i-r]+1].central() - dna[indexs[i-r]].central()));
     tail.push_back(dna[indexs[i - r]].central());
   }
   return (avg_norm<T>(m) * (avg_norm<T>(tail) - avg_norm<T>(head)));
@@ -89,8 +91,8 @@ double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna
 template <typename T>
 double rod_energy_1(Coordinates<T> const& b, double const sigma_rod) {
   Coordinates<T> const base = {b.x_, b.y_, 0.};
-  double const dist = double(base.norm()) - sigma_rod;
-  return d_rod_1 * (std::exp(-2. * beta_rod_1 * dist) - 2. * std::exp(-beta_rod_1 * dist));
+  double const exp = - beta_rod_1 * (double(base.norm()) - sigma_rod);
+  return d_rod_1 * (std::exp(2. * exp) - 2. * std::exp(exp));
 }
 
 template <typename T>
@@ -103,20 +105,63 @@ double wrap_rod(Coordinates<T> const& now, Coordinates<T> const& before,
                 Coordinates<T> const& after) {
   Coordinates<double> const z = {0., 0., 1.};
   Coordinates<T> const n = (now - before) % (after - now);
-  double const theta = std::acos((now.x_ * after.x_ + now.y_ * after.y_) / (std::sqrt(now.x_ * now.x_ + now.y_ * now.y_) * std::sqrt(after.x_ * after.x_ + after.y_ * after.y_)));
+  double const theta = std::acos((now.x_ * after.x_ + now.y_ * after.y_)
+                                / (std::sqrt(now.x_ * now.x_ + now.y_ * now.y_)
+                                    * std::sqrt(after.x_ * after.x_
+                                                + after.y_ * after.y_)
+                                  )
+                                );
   return theta * sgn(z * n);
 }
 
 template <typename T>
-double rod_energy_2(Coordinates<T> const& b, double const sigma_rod, int const n) {
-  Coordinates<T> rod_coordinates = {0., 0., 0.};
+double rod_energy_2(Coordinates<T> const& b,
+                    double const sigma_rod, int const n) {
+  Coordinates<T> rod_coord = {0., 0., 0.};
   double v_rod = 0.;
   for (int i{0}; i != n; ++i) {
-    double const dist = double(b || rod_coordinates) - sigma_rod;
-    v_rod += d_rod_2 * (std::exp(-2. * beta_rod_2 * dist) - 2. * std::exp(-beta_rod_2 * dist));
-    rod_coordinates.z_ += base;
+    double const exp = - beta_rod_2 * (double(b || rod_coord) - sigma_rod);
+    v_rod += d_rod_2 * (std::exp(2. * exp) - 2. * std::exp(exp));
+    rod_coord.z_ += base;
   }
   return v_rod;
+}
+
+template <typename T>
+double attraction_energy(Coordinates<T> const& base,
+                         std::vector<Base<T>> const& dna) {
+  double energy = 0.;
+  for (auto const& b : dna) {
+    double const exp = - beta_dna * (double(base || b.central()) - sigma_dna);
+    energy += d_dna * (std::exp(2. * exp) - 2. * std::exp(exp));
+  }
+  return energy;
+}
+
+template <typename T>
+double internal_energy(Coordinates<T> const& base,
+                       std::vector<Base<T>> const& over) {
+  double energy = 0.;
+  for (auto const& b : over) {
+    double const exp = - beta_dna * (double(base || b.central()) - sigma_dna);
+    energy += d_dna * (std::exp(2. * exp) - 2. * std::exp(exp));
+  }
+  return energy;
+}
+
+template <typename T>
+double branding(Coordinates<T> const& A_now, Coordinates<T> const& A_after,
+                Coordinates<T> const& B_now, Coordinates<T> const& B_after) {
+  Coordinates<double> const B = ((A_now - B_now) / (A_now || B_now))
+                                % ((A_after - B_after) / (A_after || B_after));
+  Coordinates<double> const C = ((A_after + B_after) / 2.)
+                                - ((A_now + B_now) / 2.);
+  return std::asin(B.norm()) * sgn(C * B);
+}
+
+template<typename T>
+double tension_energy(Coordinates<T> const& base, double const force) {
+  return - force * base.z_;
 }
 
 template <typename T>
@@ -136,7 +181,8 @@ double calculate_energy(std::vector<Base<T>> const& dna) {
 }
 
 template <typename T>
-Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> const& core) {
+Output calculate_parameters(std::vector<Base<T>> const& dna,
+                            Coordinates<T> const& core) {
   double energy = 0.;
   std::vector<int> nears;
   int const m = static_cast<int>(dna.size());
@@ -175,7 +221,8 @@ Output calculate_parameters(std::vector<Base<T>> const& dna, Coordinates<T> cons
 }
 
 template <typename T>
-Output calculate_rod_1(std::vector<Base<T>> const& dna, double const sigma_rod) {
+Output calculate_rod_1(std::vector<Base<T>> const& dna,
+                       double const sigma_rod) {
   double energy = 0.;
   double wrapping_num = 0.;
   int const m = static_cast<int>(dna.size());
@@ -196,7 +243,8 @@ Output calculate_rod_1(std::vector<Base<T>> const& dna, double const sigma_rod) 
             + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
     if (i != 1) {
       // calculate wrapping number
-      wrapping_num += wrap_rod<T>(dna[i].central(), dna[i-1].central(), dna[i+1].central());
+      wrapping_num += wrap_rod<T>(dna[i].central(), dna[i-1].central(),
+                                  dna[i+1].central());
     }
     if (i >= m-n_nearby-1) { continue; }
     // exclusion energy
@@ -207,7 +255,8 @@ Output calculate_rod_1(std::vector<Base<T>> const& dna, double const sigma_rod) 
 }
 
 template <typename T>
-Output calculate_rod_2(std::vector<Base<T>> const& dna, double const sigma_rod, int const n) {
+Output calculate_rod_2(std::vector<Base<T>> const& dna, double const sigma_rod,
+                       int const n) {
   double energy = 0.;
   double wrapping_num = 0.;
   int const m = static_cast<int>(dna.size());
@@ -228,7 +277,8 @@ Output calculate_rod_2(std::vector<Base<T>> const& dna, double const sigma_rod, 
             + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
     if (i != 1) {
       // calculate wrapping number
-      wrapping_num += wrap_rod<T>(dna[i].central(), dna[i-1].central(), dna[i+1].central());
+      wrapping_num += wrap_rod<T>(dna[i].central(), dna[i-1].central(),
+                                  dna[i+1].central());
     }
     if (i >= m-n_nearby-1) { continue; }
     // exclusion energy
@@ -236,6 +286,57 @@ Output calculate_rod_2(std::vector<Base<T>> const& dna, double const sigma_rod, 
     energy += exclusion_energy<T>(dna[i].central(), over);
   }
   return {energy, wrapping_num / (2. * M_PI), 0.};
+}
+
+template<typename T>
+Output calculate_branding(std::vector<Base<T>> const& A_dna,
+                          std::vector<Base<T>> const& B_dna,
+                          double const force) {
+  double energy = 0.;
+  double branding_num = 0.;
+  int const m = static_cast<int>(A_dna.size());
+  // tension energy for the first bases
+  energy += tension_energy<T>(A_dna[0].central(), force);
+  energy += tension_energy<T>(B_dna[0].central(), force);
+  std::vector<Base<T>> A_over(A_dna.begin() + 1 + n_nearby, A_dna.end());
+  std::vector<Base<T>> B_over(B_dna.begin() + 1 + n_nearby, B_dna.end());
+  // internal energy for the first bases
+  energy += internal_energy<T>(A_dna[0].central(), A_over);
+  energy += internal_energy<T>(B_dna[0].central(), B_over);
+  // attraction energy for the first base
+  energy += attraction_energy<T>(A_dna[0].central(), B_dna);
+  // branding number for the first bases
+  branding_num += branding<T>(A_dna[0].central(), A_dna[1].central(),
+                              B_dna[0].central(), B_dna[1].central());
+  for (int i{1}; i != m; ++i) {
+    // bonding energy
+    energy += bonding_energy<T>(A_dna[i].p(), A_dna[(i-1)].p())
+            + bonding_energy<T>(A_dna[i].q(), A_dna[(i-1)].q());
+    energy += bonding_energy<T>(B_dna[i].p(), B_dna[(i-1)].p())
+            + bonding_energy<T>(B_dna[i].q(), B_dna[(i-1)].q());
+    // tension energy
+    energy += tension_energy<T>(A_dna[i].central(), force);
+    energy += tension_energy<T>(B_dna[i].central(), force);
+    // attraction energy
+    energy += attraction_energy<T>(A_dna[i].central(), B_dna);
+    if (i >= m-1) { continue; }
+    // bending energy
+    energy += bending_energy<T>(A_dna[i].p(), A_dna[i-1].p(), A_dna[i+1].p())
+            + bending_energy<T>(A_dna[i].q(), A_dna[i-1].q(), A_dna[i+1].q());
+    energy += bending_energy<T>(B_dna[i].p(), B_dna[i-1].p(), B_dna[i+1].p())
+            + bending_energy<T>(B_dna[i].q(), B_dna[i-1].q(), B_dna[i+1].q());
+    if (i >= m-1) { break; }
+    // branding number
+    branding_num += branding<T>(A_dna[i].central(), A_dna[i+1].central(),
+                                B_dna[i].central(), B_dna[i+1].central());
+    if (i >= m-n_nearby-1) { continue; }
+    // internal energy
+    A_over.erase(A_over.begin());
+    B_over.erase(B_over.begin());
+    energy += internal_energy<T>(A_dna[i].central(), A_over);
+    energy += internal_energy<T>(B_dna[i].central(), B_over);
+  }
+  return {energy, branding_num/(2.*M_PI), 0.};
 }
 
 // Save central, p, and q coordinates of Base in separate files
