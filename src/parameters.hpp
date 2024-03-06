@@ -60,3 +60,9 @@ double constexpr absorbed = 4.8;
 double constexpr d_rod_1 = 20.;
 // width of the Morse potential (nm^-1)
 double constexpr beta_rod_1 = 2.;
+
+// parameters to rod energy 2
+// strength of the interaction between the rod and the DNA (pNnm)
+double constexpr d_rod_2 = 5.;
+// width of the Morse potential (nm^-1)
+double constexpr beta_rod_2 = 2.;
