@@ -13,6 +13,12 @@ struct Coordinates {
   Coordinates() : x_(0), y_(0), z_(0) {}
   Coordinates(T x, T y, T z) : x_(x), y_(y), z_(z) {}
 
+  // addition of coordinates
+  template<typename U>
+  Coordinates<T> operator+(Coordinates<U> const& c) const {
+    return {x_ + c.x_, y_ + c.y_, z_ + c.z_};
+  }
+
   // subtraction of coordinates
   template<typename U>
   Coordinates<T> operator-(Coordinates<U> const& c) const {
