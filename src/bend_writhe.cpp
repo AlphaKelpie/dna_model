@@ -6,13 +6,21 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-// number of basis
-int constexpr n = 100;
-
-// path
-std::string const path = "./bend_writhe/";
-
 int main() {
+  // number of basis
+  int n = 100;
+  // path
+  std::string path = "./bend_writhe/";
+
+  // Read parameters from file
+  std::ifstream file("data_bend.txt");
+  if (file.is_open()) {
+    file >> n;
+    file >> path;
+    file.close();
+  } else {
+    std::cerr << "Unable to open file\n";
+  }
   std::cout << std::fixed << std::setprecision(6);
   
   // simulations for dna graphics
