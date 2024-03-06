@@ -3,10 +3,17 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-// number of basis
-int constexpr n = 100;
-
 int main() {
+  // number of basis
+  int n = 100;
+  // Read parameters from file
+  std::ifstream file("data.txt");
+  if (file.is_open()) {
+    file >> n;
+    file.close();
+  } else {
+    std::cerr << "Unable to open file\n";
+  }
   std::cout << std::fixed << std::setprecision(6);
   std::vector<Base<double>> dna;
   dna.push_back(Base<double>(0., 0., 0.));
