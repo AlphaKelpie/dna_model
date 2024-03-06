@@ -17,6 +17,7 @@ def plot() :
   # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
   for i in range(0, len(c_x)) :
     ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2)
+  ax.plot_surface(s_x, s_y, s_z, color='b', alpha=0.2)
   ax.set_xlabel('X (nm)', fontdict=axs_style)
   ax.set_ylabel('Y (nm)', fontdict=axs_style)
   ax.set_zlabel('Z (nm)', fontdict=axs_style)
@@ -54,7 +55,14 @@ def plot_p() :
 
 # File name
 PATH = "./histone/"
-STEPS = [0, 1000000, 2000000, 3000000, 4000000, 5000000, 6000000]
+STEPS = [0, 1000, 2000, 3000, 4000, 5000, 6000]
+# Make data
+s_u = np.linspace(0, 2 * np.pi, 100)
+s_v = np.linspace(0, np.pi, 100)
+s_x = 3.5 * np.outer(np.cos(s_u), np.sin(s_v))
+s_y = 3.5 * np.outer(np.sin(s_u), np.sin(s_v)) - 4.5
+s_z = 3.5 * np.outer(np.ones(np.size(s_u)), np.cos(s_v)) + 10.2
+
 for s in STEPS :
   FILE = PATH + str(s)
   # Read coordinates from three different files
