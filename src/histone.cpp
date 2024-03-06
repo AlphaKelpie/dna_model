@@ -10,19 +10,27 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-// evolution steps
-int constexpr epochs = 100000;
-
-// number of basis
-int constexpr n = 200;
-
-// coordinates of the histone (nm)
-Coordinates<double> const histone = {0., -4.5, 10.2};
-
-// path
-std::string const path = "./histone/";
-
 int main() {
+  // evolution steps
+  int epochs = 100000;
+  // number of basis
+  int n = 200;
+  // coordinates of the histone (nm)
+  Coordinates<double> histone = {0., -4.5, 10.2};
+  // path
+  std::string path = "./histone/";
+  // Read parameters from file
+  std::ifstream file("data_histone.txt");
+  if (file.is_open()) {
+    file >> n;
+    file >> epochs;
+    file >> path;
+    file >> histone.x_ >> histone.y_ >> histone.z_;
+    file.close();
+  } else {
+    std::cerr << "Unable to open file\n";
+  }
+
   // std::random_device rd;
   // std::mt19937 gen(rd());
   std::mt19937 gen(0);
