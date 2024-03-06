@@ -21,20 +21,20 @@ double p(double const& now, double const& before) {
 
 template <typename T>
 double bonding_energy(Coordinates<T> const& now, Coordinates<T> const& before) {
-  return .5 * k_bond * std::pow((now && before) - l_0, 2);
+  return .5 * k_bond * std::pow((now || before) - l_0, 2);
 }
 
 template <typename T>
 double bending_energy(Coordinates<T> const& now, Coordinates<T> const& before,
                       Coordinates<T> const& after) {
-  T const theta = std::acos((now - before) / (now && before)
-                            * (after - now) / (after && now));
+  T const theta = std::acos((now - before) / (now || before)
+                            * (after - now) / (after || now));
   return .5 * k_bend * std::pow(theta - theta_0, 2);
 }
 
 template <typename T>
 double core_energy(Coordinates<T> const& base, Coordinates<T> const& core) {
-  double const dist = double(base && core) - sigma_core;
+  double const dist = double(base || core) - sigma_core;
   return d_core * (std::exp(-2. * beta_core * dist) - 2. * std::exp(-beta_core * dist));
 }
 
@@ -42,7 +42,7 @@ template <typename T>
 double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& over) {
   double energy = 0.;
   for (auto const& b : over) {
-    double const dist = double(base && b.central()) - sigma_exc;
+    double const dist = double(base || b.central()) - sigma_exc;
     energy += d_exc * std::exp(-2. * beta_exc * dist);
   }
   return energy;
@@ -50,7 +50,7 @@ double exclusion_energy(Coordinates<T> const& base, std::vector<Base<T>> const& 
 
 template <typename T>
 bool nearby(Coordinates<T> const& base, Coordinates<T> const& core) {
-  return (base && core) <= absorbed;
+  return (base || core) <= absorbed;
 }
 
 template <typename T>
@@ -60,7 +60,7 @@ Coordinates<T> avg_norm(std::span<Coordinates<T>> const& coordinates) {
     avg += c;
   }
   avg = avg / coordinates.size();
-  return avg / (avg && avg);
+  return avg / (avg.norm());
 }
 
 template <typename T>
@@ -89,7 +89,7 @@ double chirality(std::vector<int> const& indexs, std::vector<Base<T>> const& dna
 template <typename T>
 double rod_energy_1(Coordinates<T> const& b, double const sigma_rod) {
   Coordinates<T> const base = {b.x_, b.y_, 0.};
-  double const dist = double(base && base) - sigma_rod;
+  double const dist = double(base.norm()) - sigma_rod;
   return d_rod_1 * (std::exp(-2. * beta_rod_1 * dist) - 2. * std::exp(-beta_rod_1 * dist));
 }
 
@@ -104,7 +104,19 @@ double wrap_rod(Coordinates<T> const& now, Coordinates<T> const& before,
   Coordinates<double> const z = {0., 0., 1.};
   Coordinates<T> const n = (now - before) % (after - now);
   double const theta = std::acos((now.x_ * after.x_ + now.y_ * after.y_) / (std::sqrt(now.x_ * now.x_ + now.y_ * now.y_) * std::sqrt(after.x_ * after.x_ + after.y_ * after.y_)));
-  return theta * sgn(z && n);
+  return theta * sgn(z * n);
+}
+
+template <typename T>
+double rod_energy_2(Coordinates<T> const& b, double const sigma_rod, int const n) {
+  Coordinates<T> rod_coordinates = {0., 0., 0.};
+  double v_rod = 0.;
+  for (int i{0}; i != n; ++i) {
+    double const dist = double(b || rod_coordinates) - sigma_rod;
+    v_rod += d_rod_2 * (std::exp(-2. * beta_rod_2 * dist) - 2. * std::exp(-beta_rod_2 * dist));
+    rod_coordinates.z_ += base;
+  }
+  return v_rod;
 }
 
 template <typename T>
@@ -178,6 +190,38 @@ Output calculate_rod_1(std::vector<Base<T>> const& dna, double const sigma_rod) 
             + bonding_energy<T>(dna[i].q(), dna[(i-1)].q());
     // rod energy
     energy += rod_energy_1<T>(dna[i].central(), sigma_rod);
+    if (i >= m-1) { continue; }
+    // bending energy
+    energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
+            + bending_energy<T>(dna[i].q(), dna[i-1].q(), dna[i+1].q());
+    if (i != 1) {
+      // calculate wrapping number
+      wrapping_num += wrap_rod<T>(dna[i].central(), dna[i-1].central(), dna[i+1].central());
+    }
+    if (i >= m-n_nearby-1) { continue; }
+    // exclusion energy
+    over.erase(over.begin());
+    energy += exclusion_energy<T>(dna[i].central(), over);
+  }
+  return {energy, wrapping_num / (2. * M_PI), 0.};
+}
+
+template <typename T>
+Output calculate_rod_2(std::vector<Base<T>> const& dna, double const sigma_rod, int const n) {
+  double energy = 0.;
+  double wrapping_num = 0.;
+  int const m = static_cast<int>(dna.size());
+  // rod energy for the first base
+  energy += rod_energy_2<T>(dna[0].central(), sigma_rod, n);
+  std::vector<Base<T>> over(dna.begin() + 1 + n_nearby, dna.end());
+  // exclusion energy for the first base
+  energy += exclusion_energy<T>(dna[0].central(), over);
+  for (int i{1}; i != m; ++i) {
+    // bonding energy
+    energy += bonding_energy<T>(dna[i].p(), dna[(i-1)].p())
+            + bonding_energy<T>(dna[i].q(), dna[(i-1)].q());
+    // rod energy
+    energy += rod_energy_2<T>(dna[i].central(), sigma_rod, n);
     if (i >= m-1) { continue; }
     // bending energy
     energy += bending_energy<T>(dna[i].p(), dna[i-1].p(), dna[i+1].p())
