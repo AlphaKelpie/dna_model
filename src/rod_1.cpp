@@ -10,19 +10,27 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-// evolution steps
-int constexpr epochs = 100000;
-
-// number of basis
-int constexpr n = 200;
-
-// path
-std::string const path = "./rod_1/";
-
-// equilibrium distace between bases and rod (nm)
-double constexpr sigma_rod = 2.1;
-
 int main() {
+  // evolution steps
+  int epochs = 10000;
+  // number of basis
+  int n = 100;
+  // path
+  std::string path = "./rod_1/";
+  // equilibrium distace between bases and rod (nm)
+  double sigma_rod = 2.1;
+  // Read parameters from file
+  std::ifstream file("data_rod_1.txt");
+  if (file.is_open()) {
+    file >> n;
+    file >> epochs;
+    file >> path;
+    file >> sigma_rod;
+    file.close();
+  } else {
+    std::cerr << "Unable to open file\n";
+  }
+
   // std::random_device rd;
   // std::mt19937 gen(rd());
   std::mt19937 gen(0);
