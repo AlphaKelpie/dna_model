@@ -66,3 +66,12 @@ double constexpr beta_rod_1 = 2.;
 double constexpr d_rod_2 = 5.;
 // width of the Morse potential (nm^-1)
 double constexpr beta_rod_2 = 2.;
+
+// parameters to 2 molecules
+// parameters to attractive and repulsive energy
+// width of the Morse potential well (nm^-1)
+double constexpr beta_dna = 0.8;
+// equilibrium distance between the two center backbones (nm)
+double constexpr sigma_dna = 2.1;
+// strength of the interaction between the two center backbones (pNnm)
+double constexpr d_dna = 0.7;
