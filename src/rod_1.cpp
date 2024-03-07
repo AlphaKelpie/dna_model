@@ -28,7 +28,18 @@ int main() {
     file >> sigma_rod;
     file.close();
   } else {
-    std::cerr << "Unable to open file\n";
+    std::cerr << "Default parameters\n";
+  }
+
+  std::string sgm;
+  if (sigma_rod ==2.1) {
+    sgm = "A_";
+  } else if (sigma_rod == 3.1) {
+    sgm = "B_";
+  } else if (sigma_rod == 4.1) {
+    sgm = "C_";
+  } else {
+    return 1;
   }
 
   // std::random_device rd;
@@ -42,7 +53,7 @@ int main() {
   std::vector<Base<double>> dna;
   std::vector<Output> parameters;
   dna.push_back(Base<double>(0., 0., 0.));
-  dna[0].set_coordinates_c(Coordinates<double>(sigma_rod, 0., 0.));
+  dna[0].set_coordinates(Coordinates<double>(sigma_rod, 0., 0.));
   dna.push_back(Base<double>(0., 0., psi_0));
   Coordinates<double> central_previous_coordinates = dna[0].central();
   MatrixXd previous_rotation_matrix = MatrixXd::Identity(3, 3);
@@ -63,7 +74,7 @@ int main() {
 
   for (int e : tq::trange(epochs)) {
     if (e % 1000 == 0) {
-      save_coordinates(dna, path + std::to_string(e) + "_");
+      save_coordinates(dna, path + sgm + std::to_string(e) + "_");
     }
     std::vector<Base<double>> dna_new{dna[0], dna[1]};
     previous_rotation_matrix = MatrixXd::Identity(3, 3);
@@ -110,10 +121,10 @@ int main() {
     }
   }
 
-  save_coordinates(dna, path + std::to_string(epochs) + "_");
+  save_coordinates(dna, path + sgm + std::to_string(epochs) + "_");
   std::vector<int> cicles(epochs);
   std::iota(cicles.begin(), cicles.end(), 0);
   std::array<int, 1> useless = {0};
-  save_parameters<int, int>(parameters, cicles, useless, path);
+  save_parameters<int, int>(parameters, cicles, useless, path + sgm);
   std::cout << '\n';
 }
