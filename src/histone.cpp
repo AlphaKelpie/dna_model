@@ -12,7 +12,7 @@
 
 int main() {
   // evolution steps
-  int epochs = 100000;
+  int epochs = 6000;
   // number of basis
   int n = 200;
   // coordinates of the histone (nm)
@@ -28,7 +28,7 @@ int main() {
     file >> histone.x_ >> histone.y_ >> histone.z_;
     file.close();
   } else {
-    std::cerr << "Unable to open file\n";
+    std::cerr << "Default parameters\n";
   }
 
   // std::random_device rd;
