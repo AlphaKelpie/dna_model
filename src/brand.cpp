@@ -10,7 +10,7 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-int main() {  
+int main(int argc, char* argv[]) {  
   // number of basis
   int n = 100;
   // evolution steps
@@ -21,8 +21,9 @@ int main() {
   double force = 0.;
   // strength of the interaction
   double d_dna = 0.7;
+
   // Read parameters from file
-  std::ifstream file("data_brand.txt");
+  std::ifstream file("data_brand_" + std::string(argv[1]) + ".txt");
   if (file.is_open()) {
     file >> n;
     file >> epochs;

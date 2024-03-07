@@ -10,7 +10,7 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
   // evolution steps
   int epochs = 600000;
   // number of basis
@@ -19,8 +19,9 @@ int main() {
   Coordinates<double> histone = {0., -4.5, 10.2};
   // path
   std::string path = "./histone/";
+
   // Read parameters from file
-  std::ifstream file("data_histone.txt");
+  std::ifstream file("data_histone_" + std::string(argv[1]) + ".txt");
   if (file.is_open()) {
     file >> n;
     file >> epochs;

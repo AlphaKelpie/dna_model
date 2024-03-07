@@ -10,7 +10,7 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
   // evolution steps
   int epochs = 10000;
   // number of basis
@@ -19,8 +19,9 @@ int main() {
   std::string path = "./rod_1/";
   // equilibrium distace between bases and rod (nm)
   double sigma_rod = 2.1;
+
   // Read parameters from file
-  std::ifstream file("data_rod_1.txt");
+  std::ifstream file("data_rod_1_" + std::string(argv[1]) + ".txt");
   if (file.is_open()) {
     file >> n;
     file >> epochs;
