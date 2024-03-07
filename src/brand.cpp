@@ -14,13 +14,13 @@ int main() {
   // number of basis
   int n = 100;
   // evolution steps
-  int epochs = 1000;
+  int epochs = 2000;
   // path
   std::string path = "./brand/";
   // force on the z axis
   double force = 0.;
   // strength of the interaction
-  double d_dna;
+  double d_dna = 0.7;
   // Read parameters from file
   std::ifstream file("data_brand.txt");
   if (file.is_open()) {
@@ -31,8 +31,11 @@ int main() {
     file >> d_dna;
     file.close();
   } else {
-    std::cerr << "Unable to open file\n";
+    std::cerr << "Default parameters\n";
   }
+
+  path += std::to_string(int(d_dna*100)) + "_"
+                          + std::to_string(int(force)) + "_";
 
   // std::random_device rd;
   // std::mt19937 gen(rd());
