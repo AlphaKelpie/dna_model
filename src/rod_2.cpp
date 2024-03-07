@@ -42,9 +42,9 @@ int main() {
     return 1;
   }
 
-  // std::random_device rd;
-  // std::mt19937 gen(rd());
-  std::mt19937 gen(0);
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  // std::mt19937 gen(0);
   std::uniform_int_distribution<int> random_angle(6, 3*(n-1));
   std::uniform_int_distribution<int> oscillation(0, 1);
   std::uniform_real_distribution<double> prob(0., 1.);

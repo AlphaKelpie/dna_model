@@ -37,9 +37,9 @@ int main() {
   path += std::to_string(int(d_dna*100)) + "_"
                           + std::to_string(int(force)) + "_";
 
-  // std::random_device rd;
-  // std::mt19937 gen(rd());
-  std::mt19937 gen(0);
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  // std::mt19937 gen(0);
   std::uniform_int_distribution<int> random_angle(12, 6*(n-1));
   std::uniform_int_distribution<int> oscillation(0, 1);
   std::uniform_real_distribution<double> prob(0., 1.);
