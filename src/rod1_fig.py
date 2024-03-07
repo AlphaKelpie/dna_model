@@ -48,15 +48,15 @@ def plot_p() :
   ax.set_xlabel('Steps', fontdict=axs_style)
   ax.set_ylabel(f'{p}', fontdict=axs_style)
   # ax.legend()
-  # plt.savefig(FILE + ".png")
-  # plt.savefig(FILE + ".pdf")
+  # plt.savefig(file + ".png")
+  # plt.savefig(file + ".pdf")
   plt.show()
   plt.close()
 
 # File name
 PATH = "./rod_1/"
 STEPS = [0, 1000]#, 2000, 3000, 4000, 5000, 6000]
-PARMS = ["energy"]#, "wrapping", "chirality"]
+PARMS = ["energy"]#, "wrapping"]
 RADIUSES = [1.,]# 1.5, 2.]
 # Make data
 z = np.linspace(0, 34, 200)
@@ -98,10 +98,10 @@ for r in RADIUSES :
 
   for p in PARMS :
     # Read coordinates from file
-    file = PATH + sgm[r] + p + ".txt"
+    file = PATH + sgm[r] + p
 
     # Read coordinates from file1
-    e_data = np.loadtxt(file, delimiter='\t', skiprows=1)
+    e_data = np.loadtxt(file + ".txt", delimiter='\t', skiprows=1)
     e = e_data[:, 0]
     v = e_data[:, 1]
     plot_p()
