@@ -47,7 +47,7 @@ int main() {
   std::vector<Output> parameters;
   A_dna.push_back(Base<double>(0., 0., 0.));
   B_dna.push_back(Base<double>(0., 0., 0.));
-  B_dna[0].set_coordinates_c(Coordinates<double>(4., 0., 0.));
+  B_dna[0].set_coordinates(Coordinates<double>(4., 0., 0.));
   A_dna.push_back(Base<double>(0., 0., psi_0));
   B_dna.push_back(Base<double>(0., 0., psi_0));
   Coordinates<double> A_central_previous_coordinates = A_dna[0].central();
