@@ -12,19 +12,20 @@ axs_style = {
 def plot() :
   fig = plt.figure()
   ax = fig.add_subplot(projection='3d')
-  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.4, label='P chain')
-  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.4, label='Q chain')
-  # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
+  # sfera
+  ax.plot_surface(s_x, s_y, s_z, color='k', alpha=0.4)
+  # linee
   for i in range(0, len(c_x)) :
     ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2)
-  ax.plot_surface(s_x, s_y, s_z, color='b', alpha=0.2)
+  # punti
+  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain')
+  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain')
+  # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
   ax.set_xlabel('X (nm)', fontdict=axs_style)
   ax.set_ylabel('Y (nm)', fontdict=axs_style)
   ax.set_zlabel('Z (nm)', fontdict=axs_style)
   # ax.legend()
   ax.axis('equal')
-  # ax.set_xlim(-5, 5)
-  # ax.set_ylim(-5, 5)
   # make the panes transparent
   ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
