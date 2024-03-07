@@ -19,7 +19,7 @@ int main() {
     file >> path;
     file.close();
   } else {
-    std::cerr << "Unable to open file\n";
+    std::cerr << "Default parameters\n";
   }
   std::cout << std::fixed << std::setprecision(6);
   
