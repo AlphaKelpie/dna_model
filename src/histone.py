@@ -27,6 +27,7 @@ if __name__ == "__main__" :
 
     pool = mp.Pool(10)
     pool.map(function, range(10))
+    pool.close()
     pool.join()
 
     end = datetime.now()

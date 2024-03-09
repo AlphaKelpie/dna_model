@@ -28,7 +28,8 @@ if __name__ == "__main__" :
     run(COMPILE, check=True)
     
     pool = mp.Pool(20)
-    pool.map(function, range(10))
+    pool.map(function, range(20))
+    poll.close()
     pool.join()
 
     end = datetime.now()
