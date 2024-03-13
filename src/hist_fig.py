@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
+from matplotlib.ticker import LinearLocator
 
 plt.rc('xtick', labelsize=10)
 
@@ -13,13 +15,14 @@ def plot() :
   fig = plt.figure()
   ax = fig.add_subplot(projection='3d')
   # sfera
-  ax.plot_surface(s_x, s_y, s_z, color='k', alpha=0.4)
+  ax.plot_surface(s_x, s_y, s_z, color='k', alpha=.8, cmap=cm.coolwarm, linewidth=0, antialiased=False, zorder=0)
+  ax.zaxis.set_major_locator(LinearLocator(10))
   # linee
   for i in range(0, len(c_x)) :
-    ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2)
+    ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2, zorder=5)
   # punti
-  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain')
-  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain')
+  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain', zorder=10)
+  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain', zorder=10)
   # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
   ax.set_xlabel('X (nm)', fontdict=axs_style)
   ax.set_ylabel('Y (nm)', fontdict=axs_style)
@@ -55,8 +58,8 @@ def plot_p() :
   plt.close()
 
 # File name
-PATH = "./histone/"
-STEPS = [0, 1000, 2000, 3000, 4000, 5000, 6000]
+PATH = "../data/histone_0/"
+STEPS = [0, 100000, 200000, 300000, 400000, 500000, 600000]
 # Make data
 s_u = np.linspace(0, 2 * np.pi, 100)
 s_v = np.linspace(0, np.pi, 100)
