@@ -1,0 +1,205 @@
+\documentclass[a4paper,14pt]{article}
+\pdfpagewidth
+\paperwidth
+\pdfpageheight
+\paperheight
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[babel]{csquotes}    %per biblatex
+\usepackage[sorting=none,]	%mettere per ordinare secondo l'ordine di chiamata
+{biblatex}   %bibliografia
+\usepackage{epsfig}
+\usepackage{fancyhdr} 
+\usepackage{amsmath,amssymb}
+\usepackage{amscd} 
+\usepackage[T1]{fontenc} 
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{graphicx,color,listings}
+\graphicspath{{img/}}	%percorso per le immagini
+\usepackage{placeins}   %per \floatbarrier
+\usepackage{hologo}
+\frenchspacing
+\usepackage{rotating}
+\usepackage[bf,small]{caption}	%pacchetto caption
+\captionsetup{tableposition=top,figureposition=bottom,font=small}
+\usepackage{textcomp, gensymb}  %textcomp è per usare %, ° e altri simboli
+\usepackage{hyperref}	%tutti i tipi di collegamento tranne vref
+\hypersetup{colorlinks=true,	%attiva colori
+ linkcolor=black,	%ref
+ filecolor=black,
+ urlcolor=blue,		%url
+ citecolor=black,		%cite
+ pdftitle={Use of inkjet-printing technique to create large area OLEDs}	%per citare questo pdf?
+}
+\usepackage{multirow}
+%\usepackage{multicol}  %per scrivere su più colonne
+%\setlength{\columnsep}{10mm}	%spazio fra le colonne
+\usepackage{picture}
+\usepackage{booktabs}
+%\usepackage{subfig}	%per subfigure all'interno dello stesso ambiente figure
+\usepackage{float}  %per [H]
+%\usepackage{circuitikz}    %circuiti
+\usepackage[separate-uncertainty=true]{siunitx} %unità di misura
+\usepackage{newlfont}
+\usepackage{setspace}   %interlinee diverse
+\usepackage[version=4]{mhchem}  %formule chimiche
+\usepackage[english]{varioref}  %referenze che espicitano la pagina
+\usepackage{geometry}	%margini: già se presente li cambia
+% \geometry{
+%   left=15mm,
+%   top=20mm,
+%   right=15mm,
+%   bottom=20mm,
+% }
+
+\bibliography{bib}
+
+\title{Chiral selection in wrapping, crossover, and braiding of DNA mediated by asymmetric bend-writhe elasticity}
+\author{Tommaso Rondini}
+
+\begin{document}
+\maketitle
+
+\section*{Abstract}
+
+\section{Introduction}
+
+\section{Model of Double-Stranded DNA}
+\subsection{Coordinates of the DNA model}
+The model of DNA in that study consists of two elastic chains intertwining around a central backbone.
+The central backbone is a chain with the same number of element as the bases chains.
+The position of the $i$ element is given by a three dimensional vector $\textbf{r}_i \ \left(i=1,\dots ,N\right)$.
+The distance between adjacent nodal point is $b = 0.34$\si{\nm}, which is the distance between to neighbouring base pairs.
+The first node is set at some coordinates (usually $(0,\ 0,\ 0)^T$); the z-axis is in the direction of the second node, the y-axis lies in the plain made by the first three nodes and the x-axis is perpendicular to the z and y axis, creating a right-hand system.
+In this way, the position of the second node is $(0,\ 0,\ b)^T$ in the reference system of the fist node.
+We assign a three-dimension orthonormal frame $F_i$ to each node (it is useful for set the position of the bases): in each $i$ system the z-axis is an extension to the link between the $i-1$ and the $i$ node, the y-axis lies in the plain formed by $\textbf{r}_{i-1},\ \textbf{r}_i$ and $\textbf{r}_{i+1}$, and $\hat{x}_i=\hat{y}_i\times\hat{z}_i$.
+Now we see that $F_2=F_1$.
+We introduce angles $\Theta_2$ that rotate the $\hat{x}_2$-axis so that $\hat{z}_3$ is parallel to the link between the third and the second node.
+We have to define $\Theta_i$ angles with $i=2,\dots,N-1$.
+The fourth frame $F_4$ y-axis lies in a different plane, so we have to introduce dihedral angles $\Phi_i\ (i=2,\dots,N-2)$ to rotate around $\hat{z}_3$.
+So we have:
+\begin{equation}\label{eq:c_coo}
+\textbf{r}_i=\textbf{r}_{i-1}+\textbf{R}^{2}_{3}\left(\Phi_1,\Theta_2\right)\textbf{R}^{3}_{4}\left(\Phi_2,\Theta_3\right)\dots\textbf{R}^{i-1}_{i}\left(\Phi_{i-2},\Theta_{i-1}\right)\textbf{b}\qquad (i=3,\dots,N)
+\end{equation}
+where $\textbf{b}=(0,\ 0,\ b)^T$, $\Phi_1=0\deg$, and
+\begin{equation}\label{eq:r_matrix}
+\textbf{R}^{i-1}_{i}\left(\Phi_{i-2},\Theta_{i-1}\right)=
+\begin{pmatrix}
+\cos\Phi_{i-2} & -\sin\Phi_{i-2} & 0 \\
+\sin\Phi_{i-2} & \cos\Phi_{i-2} & 0 \\
+0 & 0 & 1 \\
+\end{pmatrix}
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & \cos\Theta_{i-1} & -\sin\Theta_{i-1} \\
+0 & \sin\Theta_{i-1} & \cos\Theta_{i-1} \\
+\end{pmatrix}
+\end{equation}
+
+The two chains of the model represent the two sugar-phosphate chains of DNA.
+The bonds between adjacency sugar-phosphate elements are elastic, as harmonic springs).
+Their positions are represented by $\textbf{P}_i$ and $\textbf{Q}_i$ respectively.
+The distance between the backbone structure and the DNA chains is fixed to $\sigma_0=1.0$\si{\nm}, and p and q elements are linked with a rigid rod that is the hydrogen-bonded base pair.
+We introduce $\psi_i\ (i=1,\dots,N)$ that is the internal twist angle characterizing the relative orientation of \textit{i-th} base pair with respect to \textit{i-th} frame attached to the central backbone; and $\omega_0$ is the common constant angle between the two vectors $\textbf{P}_i-\textbf{r}_i$ and $\textbf{Q}_i-\textbf{r}_i$.
+So the position of $p_i$ and $q_i$ respect to $\textbf{r}_i$ are
+\begin{equation}
+\begin{split}
+\textbf{p}_i & =\left(\sigma_0\cos\psi_i,\ \sigma_0\sin\psi_i,\ 0\right)^T \qquad (i=1,\dots,N) \\
+\textbf{q}_i & =\left(\sigma_0\cos\left(\psi_i+\omega_o\right),\ \sigma_0\sin\left(\psi_i+\omega_0\right),\ 0\right)^T \qquad (i=1,\dots,N)
+\end{split}
+\end{equation}
+Instead, their absolute positions are: $\textbf{P}_1=\textbf{p}_1$, $\textbf{Q}_1=\textbf{q}_1$, $\textbf{P}_2=\textbf{r}_2-\textbf{p}_2$, $\textbf{Q}_2=\textbf{r}_2-\textbf{q}_2$,
+\begin{equation}
+\textbf{P}_i=\textbf{r}-\textbf{R}^{2}_{3}\left(\Phi_1,\Theta_2\right)\textbf{R}^{3}_{4}\left(\Phi_2,\Theta_3\right)\dots\textbf{R}^{i-1}_{i}\left(\Phi_{i-2},\Theta_{i-1}\right)\textbf{p}_i\qquad (i=3,\dots,N)
+\end{equation}
+\begin{equation}
+\textbf{Q}_i=\textbf{r}-\textbf{R}^{2}_{3}\left(\Phi_1,\Theta_2\right)\textbf{R}^{3}_{4}\left(\Phi_2,\Theta_3\right)\dots\textbf{R}^{i-1}_{i}\left(\Phi_{i-2},\Theta_{i-1}\right)\textbf{q}_i\qquad (i=3,\dots,N)
+\end{equation}
+Thus, when $\psi_i$ changes, the nodal points $\textbf{P}_i$ and $\textbf{Q}_i$ move together.
+$\Theta_i$, $\Phi_i$ and $\psi_i$ are the conformation parameters of this model.
+Since the central backbone was been created just to construct the coordinates and has not any direct influence on the configuration energy, from now on in the figures we will not show it.
+
+\subsection{Equilibrium conformation}
+For the equilibrium conformation they assume that the central backbone takes a straight conformation (e.g. $\Theta_i=0\deg\ (i=2,\dots,N-1)$ and $\Phi_i=0\deg\ (i=2,\dots,N-2)$.
+They assume that the two sugar-phosphate chains complete one helical cycle per every $10$ nodal points as in B-form DNA~\cite{1}\cite{2}.
+Thus, at the equilibrium conformation the angle between two neighbouring nodal points is $\psi_0=36\degree$ with respect to the central backbone when vertically projected onto the plane perpendicular to the central backbones.
+As a result, the pitch of each helical turn of the double strand is \SI{3.4}{\nm}.
+
+The internal twist angle $\psi_i$ is so set to
+\begin{equation}
+\psi_i=\left(i-1\right) \psi_0
+\end{equation}
+In order to make the width of major groove \SI{2.2}{\nm} and that of minor groove \SI{1.2}{\nm} at the equilibrium conformation~\cite{1}\cite{2} they assume that the constant angle $\omega_0$ to be
+\begin{equation}
+\omega_0=1.2\times\dfrac{360\deg}{3.4}\simeq127.06\degree
+\end{equation}
+Based on the above settings, the equilibrium length of each elastic bond between consecutive nodal points is
+\begin{equation}\label{eq:l_0}
+\ell_0=\sqrt{2\sigma_0^2\left(1-\cos\\psi_0\right)+b^2}\simeq0.705\text{nm}
+\end{equation}
+and the equilibrium bending angle at each nodal point is
+\begin{equation}\label{eq:theta_0}
+\theta_0=\cos^{-1}\left[\dfrac{2\sigma_0^2\left(1-\cos\psi_0\right)\cos\psi_0+b^2}{2\sigma_0^2\left(1-\cos\psi_0\right)+b^2}\right]\simeq31.4\degree
+\end{equation}
+
+\subsection{Energy functions}
+Here I introduce the essential energy functions for general double-stranded helical chains.
+They are bonding and bending energy of the P- and Q-chain.
+The total bonding energy is given by
+\begin{equation}
+V_{bond}=\sum_{i=1}^{N-1}\dfrac{1}{2}k_{bond}\left(\left|\textbf{P}_{i+1}-\textbf{P}_{i}\right|-\ell_0\right)^2+\sum_{i=1}^{N-1}\dfrac{1}{2}k_{bond}\left(\left|\textbf{Q}_{i+1}-\textbf{Q}_{i}\right|-\ell_0\right)^2
+\end{equation}
+where $\ell_0$ has been determined in Eq.~\ref{eq:l_0}.
+$k_{bond}$ is the bonding rigidity.
+The total bending energy is given by
+\begin{equation}
+V_{bend}=\sum_{i=2}^{N-1}\dfrac{1}{2}k_{bend}\left(\theta_i^{(P)}-\theta_0\right)^2+\sum_{i=2}^{N-1}\dfrac{1}{2}k_{bend}\left(\theta_i^{(Q)}-\theta_0\right)^2
+\end{equation}
+where $\theta_0$ has been determined in Eq.~\ref{eq:theta_0} and $k_{bend}$ is the bending rigidity.
+$\theta_i^{(P)}$ and $\theta_i^{(Q)}$ are the bending angles in the P- and Q-chains respectively and are given by
+\begin{equation}
+\begin{split}
+\theta_i^{(P)} & =\cos^{-1}\left(\dfrac{\textbf{P}_{i}-\textbf{P}_{i-1}}{\left|\textbf{P}_{i}-\textbf{P}_{i-1}\right|}\cdot\dfrac{\textbf{P}_{i+1}-\textbf{P}_{i}}{\left|\textbf{P}_{i+1}-\textbf{P}_{i}\right|}\right)\qquad \left(i=2,\dots,N-1\right) \\
+\theta_i^{(Q)} & =\cos^{-1}\left(\dfrac{\textbf{Q}_{i}-\textbf{Q}_{i-1}}{\left|\textbf{Q}_{i}-\textbf{Q}_{i-1}\right|}\cdot\dfrac{\textbf{Q}_{i+1}-\textbf{Q}_{i}}{\left|\textbf{Q}_{i+1}-\textbf{Q}_{i}\right|}\right)\qquad \left(i=2,\dots,N-1\right)
+\end{split}
+\end{equation}
+
+The two rigidity parameters can not be found directly by experiments.
+To evaluate them, they take experimental data and assume that the energy is a quadratic function of the bending angles and set the parameters since they reproduce as better as they can the quadratic function.
+The estimated parameters are
+\begin{equation}
+k_{bond}=1000\text{pN/np}\qquad k_{bend}=7000\text{pNnm}
+\end{equation}
+
+\subsection{Monte Carlo algorithm}
+They use the Metropolis Monte Carlo algorithm to incorporate the effects of thermal and noisy environments.
+Suppose that we have a ''current'' conformation of the DNA model with total energy $V$.
+Then, we randomly choose one angle between all the bending ($\Theta_i$), dihedral ($\Phi_i$) and twist ($\psi_i$) angles and perturb it by $\pm1\degree$ randomly to obtain a ''trial'' conformation with energy $V_{tr}$.
+If the trial conformation has a lower energy ($V_{tr}<V$), the trial conformation is accepted.
+If the trial conformation has a higher energy ($V_{tr}>V$), we accept the trial conformation with the probability
+\begin{equation}
+p=\exp{\left(-\dfrac{V_{tr}-V}{k_{B}T}\right)}
+\end{equation}
+with temperature set to $T=$\SI{300}{\kelvin}
+
+Note that the Monte Carlo algorithm of the present study uses only the three kinds of angles, $\Theta$, $\Phi$, and $\psi$, as mentioned above for making trial movements.
+This makes it possible to highlight the roles of the coupling between bending and writhing of the DNA model.
+On the other hand, however, this algorithm can limit the movements of other degrees of freedom of the DNA model.
+
+\section{Results}
+\subsection{Asymmetric bend-writhe elasticity of the DNA model}
+
+\subsection{Chiral selection in wrapping of the DNA model around a spherical core particle}
+
+\subsection{Chirality of the DNA model adsorbed on a uniform rod}
+
+\subsection{Chiral selection in crossover and braiding of two juxtaposed DNA molecules}
+
+\subsection{Dependence of braiding chirality on the strength of DNA-DNA interaction}
+
+\section{Conclusions}
+
+\clearpage
+\addcontentsline{toc}{section}{\refname}
+\printbibliography
+\end{document}
