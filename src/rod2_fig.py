@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import cm
 
 plt.rc('xtick', labelsize=10)
 
@@ -13,15 +14,15 @@ def plot() :
   fig = plt.figure()
   ax = fig.add_subplot(projection='3d')
   # cilindro
-  ax.plot_surface(s_x, s_y, s_z, color='k', alpha=0.4)
-  for i in range(0, len(c_x)) :
-    ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2)
-    ax.set_xlabel('X (nm)', fontdict=axs_style)
-  # punti
-  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain')
-  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain')
-  # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
+  ax.plot_surface(s_x, s_y, s_z, color='k', alpha=0.4, cmap=cm.coolwarm, linewidth=0, antialiased=False, zorder=0)
   # linee
+  for i in range(0, len(c_x)) :
+    ax.plot([q_x[i], p_x[i]], [q_y[i], p_y[i]], [q_z[i], p_z[i]], c='r', linewidth=2, alpha=.2, zorder=5)
+  # punti
+  ax.plot(p_x, p_y, p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain', zorder=10)
+  ax.plot(q_x, q_y, q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain', zorder=10)
+  # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
+  ax.set_xlabel('X (nm)', fontdict=axs_style)
   ax.set_ylabel('Y (nm)', fontdict=axs_style)
   ax.set_zlabel('Z (nm)', fontdict=axs_style)
   # ax.legend()
@@ -36,9 +37,12 @@ def plot() :
   # ax.set_axis_off()
   # reduce white space
   fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-  # plt.savefig(FILE + ".png")
-  # plt.savefig(FILE + ".pdf")
-  plt.show()
+  ax.view_init(azim=0)
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{s}.png")
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{s}.pdf")
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{f}_20.png")
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{f}_20.pdf")
+  # plt.show()
   plt.close()
 
 def plot_p() :
@@ -48,25 +52,27 @@ def plot_p() :
   ax.set_xlabel('Steps', fontdict=axs_style)
   ax.set_ylabel(f'{p}', fontdict=axs_style)
   # ax.legend()
-  # plt.savefig(file + ".png")
-  # plt.savefig(file + ".pdf")
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{p}" + ".png")
+  # plt.savefig(f"../fig/r2_{sgm[r]}_{p}" + ".pdf")
   plt.show()
   plt.close()
 
 # File name
-PATH = "./rod_2/"
-STEPS = [0, 1000]#, 2000, 3000, 4000, 5000, 6000]
+PATH = "../data/rod_2_0/"
+STEPS = [0, 500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
+# FOLDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 PARMS = ["energy", "wrapping"]
-RADIUSES = [1.,]# 1.5, 2.]
+RADIUSES = [1., 1.5, 2.]
 # Make data
 z = np.linspace(0, 34, 200)
 theta = np.linspace(0, 2*np.pi, 50)
 theta_grid, z_grid=np.meshgrid(theta, z)
 
 sgm = {1. : 'A_', 1.5 : 'B_', 2. : 'C_'}
-
+# s = 2000000
 for r in RADIUSES :
   for s in STEPS :
+    # pat = PATH[:14] + str(f) + "/"
     s_x = r * np.cos(theta_grid)
     s_y = r * np.sin(theta_grid)
     s_z = z_grid
