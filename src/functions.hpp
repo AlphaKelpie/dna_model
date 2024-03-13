@@ -325,7 +325,6 @@ Output calculate_branding(std::vector<Base<T>> const& A_dna,
             + bending_energy<T>(A_dna[i].q(), A_dna[i-1].q(), A_dna[i+1].q());
     energy += bending_energy<T>(B_dna[i].p(), B_dna[i-1].p(), B_dna[i+1].p())
             + bending_energy<T>(B_dna[i].q(), B_dna[i-1].q(), B_dna[i+1].q());
-    if (i >= m-1) { break; }
     // branding number
     branding_num += branding<T>(A_dna[i].central(), A_dna[i+1].central(),
                                 B_dna[i].central(), B_dna[i+1].central());
