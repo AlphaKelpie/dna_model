@@ -23,18 +23,21 @@ int main(int argc, char* argv[]) {
   double d_dna = 0.7;
 
   // Read parameters from file
-  std::ifstream file("data_brand_" + std::string(argv[1]) + ".txt");
-  if (file.is_open()) {
-    file >> n;
-    file >> epochs;
-    file >> path;
-    file >> force;
-    file >> d_dna;
-    file.close();
+  if (argc == 2) {
+    std::ifstream file("data_brand_" + std::string(argv[1]) + ".txt");
+    if (file.is_open()) {
+      file >> n;
+      file >> epochs;
+      file >> path;
+      file >> force;
+      file >> d_dna;
+      file.close();
+    } else {
+      std::cerr << "Default parameters\n";
+    }
   } else {
     std::cerr << "Default parameters\n";
   }
-
   path += std::to_string(int(d_dna*100)) + "_"
                           + std::to_string(int(force)) + "_";
 
@@ -84,7 +87,7 @@ int main(int argc, char* argv[]) {
   parameters.push_back(params);
 
   for (int e : tq::trange(epochs)) {
-    if (e % 1000 == 0) {
+    if (e % 10000 == 0) {
       save_coordinates(A_dna, path + "A_" + std::to_string(e) + "_");
       save_coordinates(B_dna, path + "B_" + std::to_string(e) + "_");
     }
@@ -112,11 +115,11 @@ int main(int argc, char* argv[]) {
         B_dna_new.push_back(c);
       } else {
         auto A_theta = A_dna[i].theta();
-        auto A_phi = A_dna[i].theta();
-        auto A_psi = A_dna[i].theta();
+        auto A_phi = A_dna[i].phi();
+        auto A_psi = A_dna[i].psi();
         auto B_theta = B_dna[i].theta();
-        auto B_phi = B_dna[i].theta();
-        auto B_psi = B_dna[i].theta();
+        auto B_phi = B_dna[i].phi();
+        auto B_psi = B_dna[i].psi();
         switch (random_num % 6)
         {
           case 0:
