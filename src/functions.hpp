@@ -27,8 +27,8 @@ double bonding_energy(Coordinates<T> const& now, Coordinates<T> const& before) {
 template <typename T>
 double bending_energy(Coordinates<T> const& now, Coordinates<T> const& before,
                       Coordinates<T> const& after) {
-  T const theta = std::acos((now - before) / (now || before)
-                            * (after - now) / (after || now));
+  T const theta = std::acos(((now - before) / (now || before))
+                            * ((after - now) / (after || now)));
   return .5 * k_bend * std::pow(theta - theta_0, 2);
 }
 
@@ -296,10 +296,10 @@ Output calculate_branding(std::vector<Base<T>> const& A_dna,
   double branding_num = 0.;
   int const m = static_cast<int>(A_dna.size());
   // tension energy for the first bases
-  energy += tension_energy<T>(A_dna[0].central(), force);
-  energy += tension_energy<T>(B_dna[0].central(), force);
-  std::vector<Base<T>> A_over(A_dna.begin() + 1 + n_nearby, A_dna.end());
-  std::vector<Base<T>> B_over(B_dna.begin() + 1 + n_nearby, B_dna.end());
+  // energy += tension_energy<T>(A_dna[0].central(), force);
+  // energy += tension_energy<T>(B_dna[0].central(), force);
+  std::vector<Base<T>> A_over(A_dna.begin() + n_nearby, A_dna.end());
+  std::vector<Base<T>> B_over(B_dna.begin() + n_nearby, B_dna.end());
   // internal energy for the first bases
   energy += d_dna * internal_energy<T>(A_dna[0].central(), A_over);
   energy += d_dna * internal_energy<T>(B_dna[0].central(), B_over);
@@ -315,11 +315,11 @@ Output calculate_branding(std::vector<Base<T>> const& A_dna,
     energy += bonding_energy<T>(B_dna[i].p(), B_dna[(i-1)].p())
             + bonding_energy<T>(B_dna[i].q(), B_dna[(i-1)].q());
     // tension energy
-    energy += tension_energy<T>(A_dna[i].central(), force);
-    energy += tension_energy<T>(B_dna[i].central(), force);
+    // energy += tension_energy<T>(A_dna[i].central(), force);
+    // energy += tension_energy<T>(B_dna[i].central(), force);
     // attraction energy
     energy += d_dna * attraction_energy<T>(A_dna[i].central(), B_dna);
-    if (i >= m-1) { continue; }
+    if (i >= m-1) { break; }
     // bending energy
     energy += bending_energy<T>(A_dna[i].p(), A_dna[i-1].p(), A_dna[i+1].p())
             + bending_energy<T>(A_dna[i].q(), A_dna[i-1].q(), A_dna[i+1].q());
@@ -328,13 +328,15 @@ Output calculate_branding(std::vector<Base<T>> const& A_dna,
     // branding number
     branding_num += branding<T>(A_dna[i].central(), A_dna[i+1].central(),
                                 B_dna[i].central(), B_dna[i+1].central());
-    if (i >= m-n_nearby-1) { continue; }
+    if (i >= m-n_nearby) { continue; }
     // internal energy
     A_over.erase(A_over.begin());
     B_over.erase(B_over.begin());
     energy += d_dna * internal_energy<T>(A_dna[i].central(), A_over);
     energy += d_dna * internal_energy<T>(B_dna[i].central(), B_over);
   }
+  energy += tension_energy<T>(A_dna[m-1].central(), force);
+  energy += tension_energy<T>(B_dna[m-1].central(), force);
   return {energy, branding_num/(2.*M_PI), 0.};
 }
 
