@@ -1,4 +1,4 @@
-\documentclass[a4paper,14pt]{article}
+\documentclass[a4paper,10pt]{article}
 \pdfpagewidth
 \paperwidth
 \pdfpageheight
@@ -11,6 +11,8 @@
 \usepackage{epsfig}
 \usepackage{fancyhdr} 
 \usepackage{amsmath,amssymb}
+\RequirePackage{fix-cm}		%per il comando successivo
+\DeclareMathSizes{10}{10}{5}{4}		%regola la size dei pedici: testo, testo, pedice, subpedice
 \usepackage{amscd} 
 \usepackage[T1]{fontenc} 
 \usepackage[usenames,dvipsnames]{xcolor}
@@ -206,32 +208,32 @@ The asymmetric bend-writhe elasticity observed in Fig.??? should be the result o
 \begin{figure}[htbp]
 \centering
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{-4_1.pdf}
+\includegraphics[width=\textwidth]{bw_-4_1.pdf}
 \caption{$\Phi=-4\degree\ \Theta=1\degree$}
 \label{fig:bend_a}
 \end{subfigure}
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{-4_3.pdf}
+\includegraphics[width=\textwidth]{bw_-4_3.pdf}
 \caption{$\Phi=-4\degree\ \Theta=3\degree$}
 \label{fig:bend_b}
 \end{subfigure}
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{-4_5.pdf}
+\includegraphics[width=\textwidth]{bw_-4_5.pdf}
 \caption{$\Phi=-4\degree\ \Theta=5\degree$}
 \label{fig:bend_c}
 \end{subfigure}
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{4_1.pdf}
+\includegraphics[width=\textwidth]{bw_4_1.pdf}
 \caption{$\Phi=4\degree\ \Theta=1\degree$}
 \label{fig:bend_d}
 \end{subfigure}
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{4_3.pdf}
+\includegraphics[width=\textwidth]{bw_4_3.pdf}
 \caption{$\Phi=4\degree\ \Theta=3\degree$}
 \label{fig:bend_e}
 \end{subfigure}
 \begin{subfigure}{0.3\textwidth}
-\includegraphics[width=\textwidth]{4_5.pdf}
+\includegraphics[width=\textwidth]{bw_4_5.pdf}
 \caption{$\Phi=4\degree\ \Theta=5\degree$}
 \label{fig:bend_f}
 \end{subfigure}
@@ -241,15 +243,15 @@ The asymmetric bend-writhe elasticity observed in Fig.??? should be the result o
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.5\textwidth]{energy.pdf}
+\includegraphics[width=.5\textwidth]{bw_energy.pdf}
 \caption{Dependence of total energy of the DNA model with $N=100$ nodes, on the writhe of the central backbone, i.e., the value of dihedral angles. Each line is the total energy at different bending angles. All dihedral and bending angles are equal for all the nodes.}
 \label{fig:bend_energy}
 \end{figure}
 
 \subsection{Chiral selection in wrapping of the DNA model around a spherical core particle}\label{sec:core}
 The asymmetric bend-writhe elasticity observed in Sec.~\ref{sec:bend_writh} indicates that DNA may have a preference on the directionality, i.e., chirality, in wrapping around a core particle.
-This is a useful test because in a nucleosome, DNA usually wraps around a protein core particle called histone octamer about 1.75 times in a left-handed manner~\cite{1}\cite{2}.
-In this section I try to account for the stability of hte left-handed wrapping of DNA around a core particle in terms of the asymmetric elasticity of the DNA model.
+This is a useful test because in a nucleosome, DNA usually wraps around a protein core particle called histone octamer about 1.75 times in a left-handed manner~\cite{1, 2}.
+In this section I try to account for the stability of the left-handed wrapping of DNA around a core particle in terms of the asymmetric elasticity of the DNA model.
 
 In the Monte Carlo simulation I use a Morse potential instead of electrostatic one for the attraction between DNA and core particle, since it requires less machine time.
 The potential is
@@ -275,6 +277,32 @@ V=V_{bond}+V_{bend}+V_{core}+V_{exc}
 Fig.~\ref{fig:hist} show some of the results of Monte Carlo simulations, where $\textbf{r}_{core}=\left(0,\ -4.5,\ 10.2\right)^T$ in unit of \si{\nm}.
 We see DNA wrapping around the histone in a left-handed manner up to about $2$ turns.
 
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}{.49\textwidth}
+\includegraphics[width=\textwidth]{hist_0.pdf}
+\caption{0th step}
+\label{fig:hist_a}
+\end{subfigure}
+\begin{subfigure}{.49\textwidth}
+\includegraphics[width=\textwidth]{hist_100000.pdf}
+\caption{100000th step}
+\label{fig:hist_b}
+\end{subfigure}
+\begin{subfigure}{.49\textwidth}
+\includegraphics[width=\textwidth]{hist_300000.pdf}
+\caption{300000th step}
+\label{fig:hist_c}
+\end{subfigure}
+\begin{subfigure}{.49\textwidth}
+\includegraphics[width=\textwidth]{hist_600000.pdf}
+\caption{600000th step}
+\label{fig:hist_d}
+\end{subfigure}
+\caption{Monte Carlo simulation for wrapping of the DNA model with $N=200$ nodes around a spherical core particle at \SIlist{0;100000;300000;600000}{} step.}
+\label{fig:hist}
+\end{figure}
+
 Fig.~\ref{fig:hist_en} shows the evolution of the total energy: we see as energy tends to decrease and equilibrate as the DNA wraps around the core, except for the initial abrupt increase.
 Fig.~\ref{fig:hist_wr} shows the corresponding evolution of a wrapping number~\cite{very_old} defined by
 \begin{equation}\label{eq:wrap_num}
@@ -298,43 +326,17 @@ The only negative values of $C$ indicates that in all the simulations the DNA wr
 \begin{figure}[htbp]
 \centering
 \begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_0.pdf}
-\caption{0th step}
-\label{fig:hist_a}
-\end{subfigure}
-\begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_1.pdf}
-\caption{100000th step}
-\label{fig:hist_b}
-\end{subfigure}
-\begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_3.pdf}
-\caption{300000th step}
-\label{fig:hist_c}
-\end{subfigure}
-\begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_6.pdf}
-\caption{600000th step}
-\label{fig:hist_d}
-\end{subfigure}
-\caption{Monte Carlo simulation for wrapping of the DNA model with $N=200$ nodes around a spherical core particle at \SIlist{0;100000;300000;600000}{} step.}
-\label{fig:hist}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_en.png}
+\includegraphics[width=\textwidth]{hist_energy.pdf}
 \caption{}
 \label{fig:hist_en}
 \end{subfigure}
 \begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_wr.png}
+\includegraphics[width=\textwidth]{hist_wrapping.pdf}
 \caption{}
 \label{fig:hist_wr}
 \end{subfigure}
 \begin{subfigure}{.49\textwidth}
-\includegraphics[width=\textwidth]{hist_ch.png}
+\includegraphics[width=\textwidth]{hist_chirality.pdf}
 \caption{}
 \label{fig:hist_ch}
 \end{subfigure}
@@ -379,7 +381,125 @@ where $\hat{\textbf{z}}=\left (0,\ 0,\ 1\right )^T$, $\textbf{n}_i$ is a unit ve
 Positive sign of $W_{rod}$ means right-handed wrapping of DNA around the rod, while negative sign means left-handed wrapping.
 Absolute value of $W_{rod}$ can be regarded as a measure of the number of wrapping turns of the DNA model around the rod.
 
+In Fig.~\ref{fig:r1} the probability distribution of the wrapping number $W_{rod}$ is shown, obtained from $20$ runs of Monte Carlo simulations of the DNA model adsorbed on a uniform rod.
+Each simulation is composed by $2\times 10^6$ steps, but the first $2\times 10^5$ are discarded in order to avoid the initial conditions dependences.
+The rod radius parameter $\sigma_{rod}$ is \SI{2.1}{\nm} in Fig.~\ref{fig:r1_a}, \SI{3.1}{\nm} in Fig.~\ref{fig:r1_b}, and \SI{4.1}{\nm} in Fig.~\ref{fig:r1_c}.
+We see that the distribution is almost symmetric for each $\sigma_{rod}$ value: this means that DNA model wraps equally in left and in right way.
+We see that the absolute value of the wrapping number tends to increase as the radius of the rod decreases.
+Since $\left |W_{rod}\right |$ is mostly $<0.1$ I can see that the DNA model seldom wraps clearly around the rod.
+In Fig.~\ref{fig:r1} some images of the DNA segment with $N=100$ around rods of different diameter are shown.
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r1_A_2000000.pdf}
+\includegraphics[width=\textwidth]{r1_A_wr_pr.pdf}
+\caption{$\sigma_{rod}=2.1$nm}
+\label{fig:r1_a}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r1_B_2000000_17.pdf}
+\includegraphics[width=\textwidth]{r1_B_wr_pr.pdf}
+\caption{$\sigma_{rod}=3.1$nm}
+\label{fig:r1_b}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r1_C_2000000_7.pdf}
+\includegraphics[width=\textwidth]{r1_C_wr_pr.pdf}
+\caption{$\sigma_{rod}=4.1$nm}
+\label{fig:r1_c}
+\end{subfigure}
+\caption{Probability distribution of the wrapping number obtained from $20$ Monte Carlo simulations of $2\times 10^6$ steps (behind) and an example of the DNA wrapping model with $W_{rod}\simeq 0$ with $\sigma_{rod}=2.1$nm (a), \SI{3.1}{\nm} (b), and \SI{4.1}{\nm} (c). The rod local potential was used (Eq.~\ref{eq:rod_1}).}
+\label{fig:r1}
+\end{figure}
+
+On the other hand, when the attraction between DNA and a rod is ''global'', in the sense that a part of the rod attracts many different parts of DNA and a part of DNA attracts many different parts the rod.
+Based on this consideration, they examine a global interaction between the DNA model and a uniform rod by using Morse potential as
+\begin{equation}\label{eq:rod_2}
+V_{rod2}=\sum^{N}_{i=1}\sum^{N}_{j=1}D_{rod}\left \{\exp\left [-2\beta_{rod}\left (\left |\textbf{r}_{i}-\textbf{r}_{j}^{rod}\right |-\sigma_{rod}\right )\right ]-2\exp\left [-\beta_{rod}\left (\left |\textbf{r}_{i}-\textbf{r}_{j}^{rod}\right |-\sigma_{rod}\right )\right ]\right \}
+\end{equation}
+where $\textbf{r}_{i}$ represent the position of the $i$-th node. They have introduced $N=100$ nodal points on the central axis of the rod (so in the z-axis), $\textbf{r}_{j}^{rod} \left (j=1,\dots,N\right )$, with equal separation of $b=$\SI{.34}{\nm}.
+In Eq.~\ref{eq:rod_2} each node in the DNA model interacts with each node of the rod and vice versa.
+They set $D_{rod}=5$pNnm and $\beta_{rod}=$\SI{2.0}{\per\nm}.
+The same type of simulation performed with Eq.~\ref{eq:rod_1_energy} are performed substituting Eq.~\ref{eq:rod_1} with Eq.~\ref{eq:rod_2} ($20$ runs of $2\times 10^6$ steps discarding the first $2\times 10^5$).
+Fig.~\ref{fig:r2} shows the results of wrapping number distributions and examples of the DNA wrapping model for $\sigma_{rod}$ equals to \SI{2.1}{\nm} in Fig.~\ref{fig:r2_a}, \SI{3.1}{\nm} in Fig.~\ref{fig:r2_b}, and \SI{4.1}{\nm} in Fig.~\ref{fig:r2_c}.
+The wrapping number spreads greater range than in Fig.\ref{fig:r1} and shows a double hump, one with negative peak and the other with a positive one.
+In the paper the two humps are better separated than in my graphs, but the trend is the same: increasing rod radius the separation increases too and the left-handed wrapping (negative wrapping number) is preferred.
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r2_A_2000000_16.pdf}
+\includegraphics[width=\textwidth]{r2_A_wr_pr.pdf}
+\caption{$\sigma_{rod}=2.1$nm}
+\label{fig:r2_a}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r2_B_2000000.pdf}
+\includegraphics[width=\textwidth]{r2_B_wr_pr.pdf}
+\caption{$\sigma_{rod}=3.1$nm}
+\label{fig:r2_b}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{r2_C_2000000_18.pdf}
+\includegraphics[width=\textwidth]{r2_C_wr_pr.pdf}
+\caption{$\sigma_{rod}=4.1$nm}
+\label{fig:r2_c}
+\end{subfigure}
+\caption{Probability distribution of the wrapping number obtained from $20$ Monte Carlo simulations of $2\times 10^6$ steps (behind) and an example of the DNA wrapping model with $\sigma_{rod}=2.1$nm (a), \SI{3.1}{\nm} (b), and \SI{4.1}{\nm} (c). The rod global potential was used (Eq.~\ref{eq:rod_2}).}
+\label{fig:r1}
+\end{figure}
+
 \subsection{Chiral selection in crossover and braiding of two juxtaposed DNA molecules}
+The above results indicate that DNA may have a preferred chirality for crossover and braiding doe to its asymmetric elasticity.
+Recent works indicate that right-handed crossover and left-handed braiding are preferable for two juxtapose DNA molecules in solution on the presence of cations\cite{br_1, br_2, br_3, br_4, br_5}.
+It should be noted that crossover and braiding are intimately correlated, since if one is left-handed the second is right-handed and vice versa.
+The cited works have highlighted the electrostatic effects and steric effects: in the paper that I analyse they investigate the roles of asymmetric elasticity.
+
+Suppose there are two DNA molecules, A and B: they model the attractive interaction and the excluded volume effect between there DNA molecules at the same time using the Morse potential for simplicity as
+\begin{equation}\label{eq:ext}
+V_{ext}^{AB}=\sum_{i=1}^{N}\sum_{j=1}^{N}D_{DNA}\left \{\exp\left [-2\beta_{DNA}\left (\left |\textbf{r}_{i}^{A}-\textbf{r}_{j}^{B}\right |-\sigma_{DNA}\right )\right ]-2\exp\left [-\beta_{DNA}\left (\left |\textbf{r}_{i}^{A}-\textbf{r}_{j}^{B}\right |-\sigma_{DNA}\right )\right ]\right \}
+\end{equation}
+where $\textbf{r}_{i}^{A}$ and $\textbf{r}_{j}^{B}$ represent the positions of $i$-th and $j$-th nodal point of the two DNA models.
+The parameter $\sigma_{DNA}$ is the equilibrium distance between the nodal points of the two molecules and they set at \SI{2.1}{\nm}.
+$\beta_{DNA}=$\SI{0.8}{\per\nm} determines the width of the Morse potential, while $D_{DNA}$ determines the strength of the DNA-DNA interaction.
+It should be noted that the potential of Eq.~\ref{eq:ext} is global as Eq.~\ref{eq:rod_2}.
+
+The Eq.~\ref{eq:ext} represent the attraction potential between the two molecules due to salt condition, but there is also internal attraction inside the same molecule.
+They use Morse potential to describe this interaction, using the same parameters used in the external potential
+\begin{equation}\label{eq:int}
+V_{int}^{X}=\sum_{i=1}^{N-n}\sum_{j=i+n}^{N}D_{DNA}\left \{\exp\left [-2\beta_{DNA}\left (\left |\textbf{r}_{i}^{X}-\textbf{r}_{j}^{X}\right |-\sigma_{DNA}\right )\right ]-2\exp\left [-\beta_{DNA}\left (\left |\textbf{r}_{i}^{X}-\textbf{r}_{j}^{X}\right |-\sigma_{DNA}\right )\right ]\right \}
+\end{equation}
+where the superscript $X$ distinguishes the two DNA molecules $\left (X=\left \{A,\ B\right \}\right )$.
+They set $n=7$ to remove the repulsions between very close nodal points in comparison to $\sigma_{DNA}$.
+This potential does not break the symmetry between left- and right-handed crossovers and braidings.
+
+In order to characterize chirality and degree of braiding they introduce a braiding number
+\begin{equation}\label{eq:bainding}
+B=\dfrac{1}{2\pi}\sum_{i=1}^{N-1}sgn\left [\left (\textbf{C}_{i+1}-\textbf{C}_{i}\right )\cdot\left (\textbf{B}_{i}\times\textbf{B}_{i+1}\right )\right ]\sin^{-1}\left |\textbf{B}_{i}\times\textbf{B}_{i+1}\right |
+\end{equation}
+where
+\begin{equation}
+\textbf{C}_{i}=\dfrac{\textbf{r}_{i}^{A}+\textbf{r}_{i}^{B}}{2},\qquad \textbf{B}_{i}=\dfrac{\textbf{r}_{i}^{A}-\textbf{r}_{i}^{B}}{\left |\textbf{r}_{i}^{A}-\textbf{r}_{i}^{B}\right |}
+\end{equation}
+Positive values of $B$ signify right-handed braiding, while absolute value is a measure of the number of braiding turns.
+Because of the global attractions between and within the DNA model molecules, the two segments can sometimes collapse and form a globe.
+To regularize this aspect, they introduce a stretch force on the z-axis
+\begin{equation}\label{eq:ten}
+V_{ten}^{A}=-Fz_{N}^{A},\qquad V_{ten}^{B}=-Fz_{N}^{B}
+\end{equation}
+where $z_{N}^{X}$ is the z-coordinate of the last nodal point of the $X$ molecule.
+The parameter $F$ is the force, and I set it to \SIlist{0; 20; 40; 60; 80; 100}{\pico\neuton}.
+I perform Monte Carlo simulations for two DNA molecules, each with $N=100$ nodes and using for Eq.~\ref{eq:prob} this total energy
+\begin{equation}\label{eq:bra_energy}
+V=V_{bond}+V_{bend}+V_{ext}^{AB}+V_{int}^{A}+V_{int}^{B}+V_{ten}^{A}+V_{ten}^{B}
+\end{equation}
+
+The initial conformation is two straight molecules along the z-axis, with $\textbf{r}_{1}^{A}=\left (0,\ 0,\ 0\right )^T$ and $\textbf{r}_{1}^{B}=\left (4,\ 0,\ 0\right )^T$ in unit of \si{\nm}.
+Fig.~\ref{fig:bra} shows examples of conformations (top), braiding number (Eq.~\ref{eq:bainding}) (middle), and probability distribution of the braiding number (bottom) in $20$ Monte Carlo simulation of $2\times 10^6$ steps, discarding the first $2\times 10^5$.
+$D_{DNA}$ is set to \SI{0.7}{\pico\neuton\nano\meter}.
+The $F$ parameter is set to \SI{0}{\pico\neuton} in Fig.\ref{fig:bra_a}, \SI{60}{\pico\neuton} in Fig.\ref{fig:bra_b}, and \SI{100}{\pico\neuton} in Fig.\ref{fig:bra_c}.
+We see that braiding number is mostly negative, but it spread less values increasing the force ($F$).
 
 \subsection{Dependence of braiding chirality on the strength of DNA-DNA interaction}
 
