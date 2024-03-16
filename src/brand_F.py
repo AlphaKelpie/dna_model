@@ -26,6 +26,7 @@ def function(i) :
 
 
 if __name__ == "__main__" :
+    send_email("Inizio esecuzione", "L'esecuzione_del_programma_" + FILE + "_F_e'_iniziata.")
     start = datetime.now()
     run(COMPILE, check=True)
 
