@@ -38,13 +38,12 @@ def plot() :
   ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-  # ax.set_axis_off()
   # reduce white space
   fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-  # save = A_FILE.replace("A_", "")
-  # plt.savefig(save + ".png")
-  # plt.savefig(save + ".pdf")
-  plt.show()
+  ax.view_init(elev=50, azim=-80)
+  plt.savefig(f"../fig/brD_{d}_{s}.png", bbox_inches='tight')
+  plt.savefig(f"../fig/brD_{d}_{s}.pdf", bbox_inches='tight')
+  # plt.show()
   plt.close()
 
 def plot_p() :
@@ -52,19 +51,19 @@ def plot_p() :
   ax = fig.add_subplot()
   ax.plot(e, v, c='r', linewidth=2)
   ax.set_xlabel('Steps', fontdict=axs_style)
-  ax.set_ylabel(f'{p}', fontdict=axs_style)
+  ax.set_ylabel('Branding number', fontdict=axs_style)
   # ax.legend()
-  # plt.savefig(file + ".png")
-  # plt.savefig(file + ".pdf")
-  plt.show()
+  plt.savefig(f"../fig/brD_{d}_brand.png", bbox_inches='tight')
+  plt.savefig(f"../fig/brD_{d}_brand.pdf", bbox_inches='tight')
+  # plt.show()
   plt.close()
 
 # File name
-PATH = "./brand/"#_D
-D = [70]#, 50, 75, 100, 125, 150]
-STEPS = [0, 1000, 2000]
-PARMS = ["energy", "wrapping"]
-FORCE = 0#40
+PATH = "../data/brand_D_0/"
+D = [5, 75, 100, 125, 150]
+STEPS = [0, 500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
+PARMS = ["wrapping"]
+FORCE = 40
 for d in D :
   for s in STEPS :
     A_FILE = PATH + str(d) + '_' + str(FORCE) + '_A_' + str(s)

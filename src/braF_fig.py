@@ -14,17 +14,17 @@ def plot() :
   ax = fig.add_subplot(projection='3d')
   # linee A
   for i in range(0, len(A_c_x)) :
-    ax.plot([A_q_x[i], A_p_x[i]], [A_q_y[i], A_p_y[i]], [A_q_z[i], A_p_z[i]], c='r', linewidth=2, alpha=.2)
+    ax.plot([A_q_x[i], A_p_x[i]], [A_q_y[i], A_p_y[i]], [A_q_z[i], A_p_z[i]], c='r', linewidth=2, alpha=.2, zorder=5)
   # punti A
-  ax.plot(A_p_x, A_p_y, A_p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain A')
-  ax.plot(A_q_x, A_q_y, A_q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain A')
+  ax.plot(A_p_x, A_p_y, A_p_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain A', zorder=10)
+  ax.plot(A_q_x, A_q_y, A_q_z, c='g', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain A', zorder=10)
   # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
   # linee B
   for i in range(0, len(B_c_x)) :
-    ax.plot([B_q_x[i], B_p_x[i]], [B_q_y[i], B_p_y[i]], [B_q_z[i], B_p_z[i]], c='r', linewidth=2, alpha=.2)
+    ax.plot([B_q_x[i], B_p_x[i]], [B_q_y[i], B_p_y[i]], [B_q_z[i], B_p_z[i]], c='r', linewidth=2, alpha=.2, zorder=5)
   # punti B
-  ax.plot(B_p_x, B_p_y, B_p_z, c='b', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain B')
-  ax.plot(B_q_x, B_q_y, B_q_z, c='b', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain B')
+  ax.plot(B_p_x, B_p_y, B_p_z, c='b', linewidth=3, marker="o", markersize=4, alpha=.6, label='P chain B', zorder=10)
+  ax.plot(B_q_x, B_q_y, B_q_z, c='b', linewidth=3, marker="o", markersize=4, alpha=.6, label='Q chain B', zorder=10)
   # ax.plot(c_x, c_y, c_z, c='r', linewidth=3, marker="o", markersize=4, alpha=.2, label='Backbones')
   ax.set_xlabel('X (nm)', fontdict=axs_style)
   ax.set_ylabel('Y (nm)', fontdict=axs_style)
@@ -60,11 +60,11 @@ def plot_p() :
   plt.close()
 
 # File name
-PATH = "./brand/"#_F
+PATH = "../data/brand/"
 DIST = 70
-STEPS = [0, 1000, 2000]
+STEPS = [500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
 PARMS = ["energy", "wrapping"]
-F = [0]#, 20, 40, 60, 80, 100]
+F = [0, 20, 40, 60, 80, 100]
 for f in F :
   for s in STEPS :
     A_FILE = PATH + str(DIST) + '_' + str(f) + '_A_' + str(s)

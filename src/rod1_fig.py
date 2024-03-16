@@ -38,10 +38,10 @@ def plot() :
   # reduce white space
   fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
   ax.view_init(azim=0)
-  plt.savefig(f"../fig/r1_{sgm[r]}_{s}.png")
-  plt.savefig(f"../fig/r1_{sgm[r]}_{s}.pdf")
-  # plt.savefig(f"r1_{r}_20.png")
-  # plt.savefig(f"r1_{r}_20.pdf")
+  plt.savefig(f"../fig/r1_{sgm[r]}_{s}.png", bbox_inches='tight')
+  plt.savefig(f"../fig/r1_{sgm[r]}_{s}.pdf", bbox_inches='tight')
+  # plt.savefig(f"../fig/r1_{sgm[r]}_2000000_{s}.png", bbox_inches='tight')
+  # plt.savefig(f"../fig/r1_{sgm[r]}_2000000_{s}.pdf", bbox_inches='tight')
   # plt.show()
   plt.close()
 
@@ -50,17 +50,20 @@ def plot_p() :
   ax = fig.add_subplot()
   ax.plot(e, v, c='r', linewidth=2)
   ax.set_xlabel('Steps', fontdict=axs_style)
-  ax.set_ylabel(f'{p}', fontdict=axs_style)
+  if p == "energy" :
+    ax.set_ylabel('Energy (pNnm)', fontdict=axs_style)
+  elif p == "wrapping" :
+    ax.set_ylabel('Wrapping', fontdict=axs_style)
   # ax.legend()
-  plt.savefig(f"../fig/r1_{sgm[r]}_{p}" + ".png")
-  plt.savefig(f"../fig/r1_{sgm[r]}_{p}" + ".pdf")
+  plt.savefig(f"../fig/r1_{sgm[r]}_{p}.png", bbox_inches='tight')
+  plt.savefig(f"../fig/r1_{sgm[r]}_{p}.pdf", bbox_inches='tight')
   # plt.show()
   plt.close()
 
 # File name
 PATH = "../data/rod_1_0/"
 STEPS = [0, 500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
-# STEPS = [2000000]
+# STEPS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
 PARMS = ["energy", "wrapping"]
 RADIUSES = [1., 1.5, 2.]
 # Make data
@@ -77,6 +80,7 @@ for r in RADIUSES :
     s_z = z_grid
     
     FILE = PATH + sgm[r] + str(s)
+    # FILE = PATH[:14] + str(s) + '/' + sgm[r] + str(2000000)
     # Read coordinates from three different files
     c_file = FILE + "_0_0_c.txt"
     p_file = FILE + "_0_0_p.txt"

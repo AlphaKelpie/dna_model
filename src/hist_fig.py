@@ -33,16 +33,11 @@ def plot() :
   ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.zaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
-  # make the grid lines transparent
-  # ax.xaxis._axinfo["grid"]['color'] =  (1,1,1,0)
-  # ax.yaxis._axinfo["grid"]['color'] =  (1,1,1,0)
-  # ax.zaxis._axinfo["grid"]['color'] =  (1,1,1,0)
-  # ax.set_axis_off()
   # reduce white space
   fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-  # plt.savefig(FILE + ".png")
-  # plt.savefig(FILE + ".pdf")
-  plt.show()
+  plt.savefig(f"../fig/hist_{s}.png", bbox_inches='tight', pad_inches=.2)
+  plt.savefig(f"../fig/hist_{s}.pdf", bbox_inches='tight', pad_inches=.2)
+  # plt.show()
   plt.close()
 
 def plot_p() :
@@ -50,11 +45,16 @@ def plot_p() :
   ax = fig.add_subplot()
   ax.plot(e, v, c='r', linewidth=2)
   ax.set_xlabel('Steps', fontdict=axs_style)
-  ax.set_ylabel(f'{p}', fontdict=axs_style)
+  if p == "energy" :
+    ax.set_ylabel('Energy (pNnm)', fontdict=axs_style)
+  elif p == "wrapping" :
+    ax.set_ylabel('Wrapping', fontdict=axs_style)
+  elif p == "chirality" :
+    ax.set_ylabel('Chirality', fontdict=axs_style)
   # ax.legend()
-  # plt.savefig(FILE + ".png")
-  # plt.savefig(FILE + ".pdf")
-  plt.show()
+  plt.savefig(f"../fig/hist_{p}.png", bbox_inches='tight')
+  plt.savefig(f"../fig/hist_{p}.pdf", bbox_inches='tight')
+  # plt.show()
   plt.close()
 
 # File name
