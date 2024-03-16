@@ -51,10 +51,10 @@ def plot_p() :
   ax = fig.add_subplot()
   ax.plot(e, v, c='r', linewidth=2)
   ax.set_xlabel('Steps', fontdict=axs_style)
-  ax.set_ylabel('Branding number', fontdict=axs_style)
+  ax.set_ylabel('Braiding number', fontdict=axs_style)
   # ax.legend()
-  plt.savefig(f"../fig/brD_{d}_brand.png", bbox_inches='tight')
-  plt.savefig(f"../fig/brD_{d}_brand.pdf", bbox_inches='tight')
+  plt.savefig(f"../fig/brD_{d}_braid.png", bbox_inches='tight')
+  plt.savefig(f"../fig/brD_{d}_braid.pdf", bbox_inches='tight')
   # plt.show()
   plt.close()
 

@@ -31,9 +31,15 @@ def plot() :
   ax.set_zlabel('Z (nm)', fontdict=axs_style)
   # ax.legend()
   ax.axis('equal')
-  ax.set_xlim(-7, 7)
-  ax.set_ylim(-7, 7)
-  ax.set_zlim(0, 23)
+  if f == 0 :
+    ax.set_xlim(4, 24)
+    ax.set_ylim(-8, 8)
+    ax.set_zlim(0, 23)
+  else :
+    ax.set_xlim(-7, 7)
+    ax.set_ylim(-7, 7)
+    ax.set_zlim(0, 23)
+    ax.view_init(elev=50, azim=-80)
   # make the panes transparent
   ax.xaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
   ax.yaxis.set_pane_color((1.0, 1.0, 1.0, 0.0))
@@ -41,10 +47,13 @@ def plot() :
   # ax.set_axis_off()
   # reduce white space
   fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-  # save = A_FILE.replace("A_", "")
-  # plt.savefig(save + ".png")
-  # plt.savefig(save + ".pdf")
-  plt.show()
+  if f == 0 :
+    plt.savefig(f"../fig/brF_{f}_{s}.png")
+    plt.savefig(f"../fig/brF_{f}_{s}.pdf")
+  else :
+    plt.savefig(f"../fig/brF_{f}_{s}.png", bbox_inches='tight')
+    plt.savefig(f"../fig/brF_{f}_{s}.pdf", bbox_inches='tight')
+  # plt.show()
   plt.close()
 
 def plot_p() :
@@ -52,18 +61,18 @@ def plot_p() :
   ax = fig.add_subplot()
   ax.plot(e, v, c='r', linewidth=2)
   ax.set_xlabel('Steps', fontdict=axs_style)
-  ax.set_ylabel(f'{p}', fontdict=axs_style)
+  ax.set_ylabel(f'Braiding number', fontdict=axs_style)
   # ax.legend()
-  # plt.savefig(file + ".png")
-  # plt.savefig(file + ".pdf")
-  plt.show()
+  plt.savefig(f"../fig/brF_{f}_braid.png", bbox_inches='tight')
+  plt.savefig(f"../fig/brF_{f}_braid.pdf", bbox_inches='tight')
+  # plt.show()
   plt.close()
 
 # File name
-PATH = "../data/brand/"
+PATH = "../data/brand_F_0/"
 DIST = 70
-STEPS = [500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
-PARMS = ["energy", "wrapping"]
+STEPS = [0, 500000, 750000, 1000000, 1250000, 1500000, 1750000, 2000000]
+PARMS = ["wrapping"]
 F = [0, 20, 40, 60, 80, 100]
 for f in F :
   for s in STEPS :
