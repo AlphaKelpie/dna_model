@@ -36,3 +36,12 @@
 
 # Prove files
 pr*
+*.cc
+
+# Tex files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.xml
