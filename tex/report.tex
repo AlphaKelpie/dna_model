@@ -57,15 +57,47 @@
 
 \bibliography{bib}
 
-\title{Chiral selection in wrapping, crossover, and braiding of DNA mediated by asymmetric bend-writhe elasticity}
-\author{Tommaso Rondini}
+\title{DNA coars-grain model to reproduce characteristics\\of higher-order structures\thanks{Chiral selection in wrapping, crossover, and braiding of DNA mediated by asymmetric bend-writhe elasticity\cite{main}}}
+\author{Tommaso Rondini\thanks{Master's degree student in Physics, University of Bologna (Italy). Email: \url{tommaso.rondini@studio.unibo.it}}}
 
 \begin{document}
 \maketitle
 
 \section*{Abstract}
+In a paper of the $2015$~\cite{main}, Tomohiro Yanao, Sosuke Sano and Kenichi Yoshikawa have improved their previously model~\cite{old, very_old} of the DNA double helix structure.
+They have implemented this model to analyse wrapping, crossover, and braiding of DNA, phenomenons of fundamental interest on genome packaging, gene regulation, and enzyme recognition.
+The study has explored elastic mechanisms for the selection of chirality in wrapping, crossover, and braiding of DNA based on a coarse-grained model.
+
+The DNA model consists of two elastic chains that mutually intertwine in a right-handed manner forming a double-stranded helix with the distinction between major and minor grooves.
+Although individual potential energy functions of the DNA model have no asymmetry in terms of left and right twist, the model as a whole exhibits an asymmetric propensity to writhe in the left direction upon bending due to the right-handed helical geometry.
+Monte Carlo simulations of this model suggest that DNA has a propensity to prefer left-handed wrapping around a spherical core particle and also around a uniform rod due to the asymmetric elastic coupling between bending and writhing.
+This result indicates an elastic origin of the uniform left-handed wrapping of DNA in nucleosomes and also has implications on the wrapping of double-stranded DNA around rod-like molecules.
+Monte Carlo simulations of the DNA model also suggest that two juxtaposed DNA molecules can braid each other spontaneously under moderate attractive interactions with the preference for left-handed braiding due to the asymmetric coupling between bending and writhing.
+This result suggests the importance of asymmetric elasticity in the selection of chirality in braiding of a pair of DNA molecules.
+
+I have recreated the code to reproduce their simulations.
+The main aspects of the study have been achieved: the DNA model prefers left-handed writhing and braiding and the distributions of the parameters reflect the expected ones.
+Some differences happen, maybe due to statistical issues and to a complex landscape potential.
 
 \section{Introduction}
+Higher-order structures of DNA are the subject of extensive studies for their significance in genome packaging, gene regulation, and enzyme recognition~\cite{1,2}.
+Wrapping, crossover, and braiding are among the most fundamental and essential higher-order structures of DNA.
+Since all these higher-order structures are associated with superhelical conformations of DNA, chirality, i.e., right- or left-handedness, of these superhelical motifs should play important roles.
+This study thereby has explored a possible mechanism for the selection of chirality in wrapping, crossover, and braiding of DNA based on a coarse-grained elastic model.
+Since not only DNA but also many other biopolymers assume helical conformations, roles of helical chirality are of rather universal interest~\cite{3}.
+
+In eukaryotic DNA achieves a highly compact and hierarchical packaging in a cell nucleus, which is called chromatin~\cite{10}.
+At the lowest level of the hierarchy of chromatin, DNA wraps around a protein core particle called histone octamer about $1.75$ times in a left-handed manner~\cite{1,2}.
+The uniform left-handedness of this wrapping should be important for the clustering of nucleosomes mediated by charge distributions~\cite{16} to form further higher-order structures in chromatin.
+The present study has tried to develop a minimal model to account for the stability of left-handed wrapping of DNA around a core particle in terms of asymmetric elasticity of DNA.
+In addition to wrapping of DNA around a core particle, wrapping and unwrapping of DNA around rod-like molecules~\cite{27}, including carbon nanotubes~\cite{rod_2}, is also an interesting subject.
+The present study also has addressed the issue of chirality of DNA adsorbed on a uniform rod.
+
+Crossover and braiding are also important motifs of DNA for genome packaging, gene regulation, and enzyme recognition~\cite{br_1}.
+Some researches~\cite{br_1, br_2, br_3} had suggested that right-handed crossover is more stable than left-handed one in solution due to groove-backbone interaction especially in the presence of divalent cations.
+Moreover, Kornyshev et al.~\cite{br_4, br_5} had suggested that braiding of DNA molecules could be driven by electrostatic interactions and that left-handed braiding is preferred over right-handed one due to helical alignment.
+It is clear that left-handed crossover implies right-handed braiding and vice-versa.
+This study has explored the roles of mechanical interaction for the selection and stability of left-handed braiding of DNA in terms of the intrinsic asymmetric elasticity, or nonlinear coupling, between bending and writhing of DNA, as the intrinsic property of helical double-stranded polymer.
 
 \section{Model of Double-Stranded DNA}
 \subsection{Coordinates of the DNA model}
@@ -199,15 +231,7 @@ Fig.~\ref{fig:bend}(d)-(f) show the same bending angles but dihedral angles are 
 From these figures, we confirm that negative dihedral angles $\Phi_i$ give rise to left-handed super-helical conformations, while positive dihedral angles $\Phi_i$ give rise to right-handed super-helical conformations.
 We also see that the more bending angles $\Theta_i$ increase, the more super-helical pitch of the DNA model decreases and super-helical radius increases, under conditions of fixed dihedral angles $\Phi_i$.
 
-Fig.~\ref{fig:bend_energy} shows the dependence of the total energy of the DNA mode with $N=100$ nodes, $V_{DNA}=V_{bond}+V_{bend}$ defined by Eq.~\ref{eq:bond} and Eq.~\ref{eq:bend} on writhing the central backbone.
-All the dihedral angles are set to the same value $\Phi$ that changes from $-4\degree$ to $4\degree$, while all bending angles are fixed to $1\degree$ (solid curve, blue), $3\degree$ (broken curve, green), and $5\degree$ (dash-dotted curve, red).
-There is an evident asymmetry between left-handed writhing ($\Phi<0$) and right-handed writhing ($\Phi>0$).
-In particular left-handed writhing has lower energy value at the same absolute value of dihedral angle, and increasing bending angles this difference increases.
-This result clearly indicates the intrinsic asymmetric coupling between bending and writhing of the DNA model.
-Specifically, the DNA model has a preference for left-handed writhing upon bending.
-The asymmetric bend-writhe elasticity observed in Fig.~\ref{fig:bend_energy} should be the result of the right-handedness of the double-stranded model of DNA since there is no other chirality in the model or in the potential energy functions of the DNA model.
-
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{0.3\textwidth}
 \includegraphics[width=\textwidth]{bw_-4_1.pdf}
@@ -243,7 +267,15 @@ The asymmetric bend-writhe elasticity observed in Fig.~\ref{fig:bend_energy} sho
 \label{fig:bend}
 \end{figure}
 
-\begin{figure}[htbp]
+Fig.~\ref{fig:bend_energy} shows the dependence of the total energy of the DNA mode with $N=100$ nodes, $V_{DNA}=V_{bond}+V_{bend}$ defined by Eq.~\ref{eq:bond} and Eq.~\ref{eq:bend} on writhing the central backbone.
+All the dihedral angles are set to the same value $\Phi$ that changes from $-4\degree$ to $4\degree$, while all bending angles are fixed to $1\degree$ (solid curve, blue), $3\degree$ (broken curve, green), and $5\degree$ (dash-dotted curve, red).
+There is an evident asymmetry between left-handed writhing ($\Phi<0$) and right-handed writhing ($\Phi>0$).
+In particular left-handed writhing has lower energy value at the same absolute value of dihedral angle, and increasing bending angles this difference increases.
+This result clearly indicates the intrinsic asymmetric coupling between bending and writhing of the DNA model.
+Specifically, the DNA model has a preference for left-handed writhing upon bending.
+The asymmetric bend-writhe elasticity observed in Fig.~\ref{fig:bend_energy} should be the result of the right-handedness of the double-stranded model of DNA since there is no other chirality in the model or in the potential energy functions of the DNA model.
+
+\begin{figure}[tb]
 \centering
 \includegraphics[width=.5\textwidth]{bw_energy.pdf}
 \caption{Dependence of total energy of the DNA model with $N=100$ nodes, on the writhe of the central backbone, i.e., the value of dihedral angles.
@@ -284,7 +316,7 @@ V=V_{bond}+V_{bend}+V_{core}+V_{exc}
 Fig.~\ref{fig:hist} show some of the results of Monte Carlo simulations, where $\textbf{r}_{core}=\left(0,\ -4.5,\ 10.2\right)^T$ in unit of \si{\nm}.
 We see DNA wrapping around the histone in a left-handed manner up to about $2$ turns.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{hist_0.pdf}
@@ -340,7 +372,7 @@ In order to avoid the bias due to the specific initial conditions introduced abo
 The clear peak at negative value of $C$ indicates the strong propensity of the DNA model to wrap around the core in the left-handed manner.
 The only negative values of $C$ indicates that in all the simulations the DNA wraps in left-handed manner around core particle.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.33\textwidth}
 \includegraphics[width=\textwidth]{hist_energy.pdf}
@@ -407,7 +439,7 @@ We see that the absolute value of the wrapping number tends to increase as the r
 Since $\left |W_{rod}\right |$ is mostly $<0.1$ I can see that the DNA model seldom wraps clearly around the rod.
 In Fig.~\ref{fig:r1} some images of the DNA segment with $N=100$ around rods of different diameter are shown.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{r1_A_2000000.pdf}
@@ -445,7 +477,7 @@ Fig.~\ref{fig:r2} shows the results of wrapping number distributions and example
 The wrapping number spreads greater range than in Fig.~\ref{fig:r1} and shows a double hump, one with negative peak and the other with a positive one.
 In the paper the two humps are better separated than in my graphs, but the trend is the same: increasing rod radius the separation increases too and the left-handed wrapping (negative wrapping number) is preferred.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{r2_A_2000000_16.pdf}
@@ -532,7 +564,7 @@ There are two faint second peaks, one negative and one positive, that indicate s
 Fig.~\ref{fig:braF_c} shows braiding probability distribution when $F=$\SI{100}{\pico\newton}.
 The distribution is even narrower and symmetric, but we can still see the negative bias.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.3\textwidth}
 \vspace{1.13cm}
@@ -564,7 +596,7 @@ Fig.~\ref{fig:braF_pr} summarizes the dependence of the probabilities for left-h
 The probabilities are defined as the integrated areas of the probability distributions as in Fig~\ref{fig:braF} over the range $B<0$ and $B>0$.
 The increasing symmetry respect negative and positive values of braiding number is not so clear and there are more fluctuations than in the original paper.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \includegraphics[width=.5\textwidth]{brF_br_gr.pdf}
 \caption{Dependence of the probabilities for left- and right-handed braiding of a pair of DNA model molecules on tension $F$.
@@ -595,7 +627,7 @@ There are many peaks, indicating a stepwise braiding.
 In the negative range, the distribution is biased towards peaks with greater absolute values, while in the positive region it is biased towards low peaks.
 This means that the left-handed braiding tends to have larger number of braiding turns than right-handed one.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{brD_5_2000000.pdf}
@@ -625,7 +657,7 @@ This means that the left-handed braiding tends to have larger number of braiding
 We see that braiding number is mostly negative, and it spread more values increasing the DNA-DNA interaction parameter ($D_{DNA}$).
 Additionally, the left-handed braiding probability increases as the interaction parameter increases for small value; then decreases as the increasing of $D_{DNA}$, as can be see in Fig.~\ref{fig:braD_pr}.
 
-\begin{figure}[htbp]
+\begin{figure}[tb]
 \centering
 \includegraphics[width=.5\textwidth]{brD_br_gr.pdf}
 \caption{Dependence of the probabilities for left- and right-handed braiding of a pair of DNA model molecules on DNA-DNA attractive interaction $D_{DNA}$.
