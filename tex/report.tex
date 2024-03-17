@@ -286,22 +286,32 @@ We see DNA wrapping around the histone in a left-handed manner up to about $2$ t
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{hist_0.pdf}
 \caption{0th step}
 \label{fig:hist_a}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{hist_100000.pdf}
 \caption{100000th step}
 \label{fig:hist_b}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{hist_300000.pdf}
 \caption{300000th step}
 \label{fig:hist_c}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{hist_400000.pdf}
+\caption{400000th step}
+\label{fig:hist_c2}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
+\includegraphics[width=\textwidth]{hist_500000.pdf}
+\caption{500000th step}
+\label{fig:hist_c3}
+\end{subfigure}
+\begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{hist_600000.pdf}
 \caption{600000th step}
 \label{fig:hist_d}
@@ -332,29 +342,30 @@ The only negative values of $C$ indicates that in all the simulations the DNA wr
 
 \begin{figure}[htbp]
 \centering
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.33\textwidth}
 \includegraphics[width=\textwidth]{hist_energy.pdf}
 \caption{}
 \label{fig:hist_en}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.33\textwidth}
 \includegraphics[width=\textwidth]{hist_wrapping.pdf}
 \caption{}
 \label{fig:hist_wr}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\\
+\begin{subfigure}{.33\textwidth}
 \includegraphics[width=\textwidth]{hist_chirality.pdf}
 \caption{}
 \label{fig:hist_ch}
 \end{subfigure}
-\begin{subfigure}{.49\textwidth}
+\begin{subfigure}{.33\textwidth}
 \includegraphics[width=\textwidth]{hist_ch_pr.pdf}
 \caption{}
 \label{fig:hist_ch_pr}
 \end{subfigure}
-\caption{(a) the evolution of total energy(Eq.~\ref{eq:hist_energy}).
-(b) the evolution of wrapping number (Eq.~\ref{eq:wrap_num}).
-(c) the evolution of chirality parameter (Eq.~\ref{eq:chirality}).
+\caption{(a) the evolution of total energy(Eq.~\ref{eq:hist_energy});
+(b) the evolution of wrapping number (Eq.~\ref{eq:wrap_num});
+(c) the evolution of chirality parameter (Eq.~\ref{eq:chirality});
 (d) probability distribution of the chirality parameter obtained from $10$ runs of Monte Carlo simulation of $6\times 10^5$ steps without the first $3\times 10^5$.}
 \label{fig:hist_params}
 \end{figure}
@@ -445,7 +456,7 @@ In the paper the two humps are better separated than in my graphs, but the trend
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{r2_B_2000000.pdf}
 \includegraphics[width=\textwidth]{r2_B_wr_pr.pdf}
-\caption{$\sigma_{rod}=$\SI{3.1}\nm}}
+\caption{$\sigma_{rod}=$\SI{3.1}{\nm}}
 \label{fig:r2_b}
 \end{subfigure}
 \begin{subfigure}{.3\textwidth}
@@ -505,41 +516,57 @@ V=V_{bond}+V_{bend}+V_{ext}^{AB}+V_{int}^{A}+V_{int}^{B}+V_{ten}^{A}+V_{ten}^{B}
 
 The initial conformation is two straight molecules along the z-axis, with $\textbf{r}_{1}^{A}=\left (0,\ 0,\ 0\right )^T$ and $\textbf{r}_{1}^{B}=\left (4,\ 0,\ 0\right )^T$ in unit of \si{\nm}.
 Fig.~\ref{fig:braF} shows examples of conformations (top), braiding number (Eq.~\ref{eq:bainding}) (middle), and probability distribution of the braiding number (bottom) in $20$ Monte Carlo simulation of $2\times 10^6$ steps, discarding the first $2\times 10^5$.
-$D_{DNA}$ is set to \SI{0.7}{\pico\neuton\nano\meter}.
-The $F$ parameter is set to \SI{0}{\pico\neuton} in Fig.\ref{fig:braF_a}, \SI{60}{\pico\neuton} in Fig.\ref{fig:braF_b}, and \SI{100}{\pico\neuton} in Fig.\ref{fig:braF_c}.
-We see that braiding number is mostly negative, but it spread less values increasing the force ($F$).
-Additionally, the left-handed braiding probability decreases as the force parameter increases, as can be see in Fig.~\ref{fig:braF_pr}.
+$D_{DNA}$ is set to \SI{0.7}{\pico\newton\nano\meter}.
+The $F$ parameter is set to \SI{0}{\pico\newton} in Fig.\ref{fig:braF_a}, \SI{60}{\pico\newton} in Fig.\ref{fig:braF_b}, and \SI{100}{\pico\newton} in Fig.\ref{fig:braF_c}.
+
+From Fig.~\ref{fig:braF_a} (middle) -when there is not soothing force- the braiding number mostly takes negative values, indicating that the left-handed braiding is preferred in this simulation.
+Introducing the soothing force -let's see Fig.~\ref{fig:braF_b} and~\ref{fig:braF_c}- we see that the absolute values of $B$ tend to decrease as the tension increases.
+This means that DNA molecules do not braid largely, but just crossover.
+However they still prefer negative $B$ conformations that, since the conventions about crossover~\cite{br_1}, implies right-handed crossover.
+
+Looking at the down parts of Fig.~\ref{fig:braF} we observe the probability distribution of braiding number.
+When $F=$\SI{0}{\pico\newton} (Fig.~\ref{fig:braF_a}) the probability is distributed over a wide range, with some peaks in both negative and positive ranges but still higher probability for negative values.
+With $F=$\SI{60}{\pico\newton} (Fig.~\ref{fig:braF_b}) the probability is narrower than that of Fig.~\ref{fig:braF_a}.
+It indicates, as said above, that the soothing force reduce the braiding, but it is still biased towards negative values.
+There are two faint second peaks, one negative and one positive, that indicate semi-equilibrium conformations.
+Fig.~\ref{fig:braF_c} shows braiding probability distribution when $F=$\SI{100}{\pico\newton}.
+The distribution is even narrower and symmetric, but we can still see the negative bias.
 
 \begin{figure}[htbp]
 \centering
 \begin{subfigure}{.3\textwidth}
+\vspace{1.13cm}
 \includegraphics[width=\textwidth]{brF_0_2000000.pdf}
-\includegraphics[width=\textwidth]{brF_0_brand.pdf}
+\includegraphics[width=\textwidth]{brF_0_braid.pdf}
 \includegraphics[width=\textwidth]{brF_0_br_pr.pdf}
-\caption{$F=$\SI{0}{\pico\neuton}}
+\caption{$F=$\SI{0}{\pico\newton}}
 \label{fig:braF_a}
 \end{subfigure}
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{brF_60_2000000.pdf}
-\includegraphics[width=\textwidth]{brF_60_brand.pdf}
+\includegraphics[width=\textwidth]{brF_60_braid.pdf}
 \includegraphics[width=\textwidth]{brF_60_br_pr.pdf}
-\caption{$F=$\SI{60}{\pico\neuton}}
+\caption{$F=$\SI{60}{\pico\newton}}
 \label{fig:braF_b}
 \end{subfigure}
 \begin{subfigure}{.3\textwidth}
 \includegraphics[width=\textwidth]{brF_100_2000000.pdf}
-\includegraphics[width=\textwidth]{brF_100_brand.pdf}
+\includegraphics[width=\textwidth]{brF_100_braid.pdf}
 \includegraphics[width=\textwidth]{brF_100_br_pr.pdf}
-\caption{$F=$\SI{100}{\pico\neuton}}
+\caption{$F=$\SI{100}{\pico\newton}}
 \label{fig:braF_c}
 \end{subfigure}
-\caption{Examples of the two DNA crossover model (above), evolution of braiding number of Eq.~\ref{eq:braiding} (middle), and probability distribution of braiding number obtained from $20$ Monte Carlo simulations of $2\times 10^6$ steps (down) with $F$ equal to \SI{0}{\pico\neuton} (a), \SI{60}{\pico\neuton} (b), and \SI{100}{\pico\neuton} (c).}
+\caption{Examples of the two DNA crossover model (above), evolution of braiding number of Eq.~\ref{eq:braiding} (middle), and probability distribution of braiding number obtained from $20$ Monte Carlo simulations of $2\times 10^6$ steps (down) with $F$ equal to \SI{0}{\pico\newton} (a), \SI{60}{\pico\newton} (b), and \SI{100}{\pico\newton} (c).}
 \label{fig:braF}
 \end{figure}
 
+Fig.~\ref{fig:braF_pr} summarizes the dependence of the probabilities for left-handed braiding and that for right-handed braiding on the magnitude of tension $F$.
+The probabilities are defined as the integrated areas of the probability distributions as in Fig~\ref{fig:braF} over the range $B<0$ and $B>0$.
+The increasing symmetry respect negative and positive values of braiding number is not so clear and there are more fluctuations than in the original paper.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.6\textwidth]{brF_br_gr.pdf}
+\includegraphics[width=.5\textwidth]{brF_br_gr.pdf}
 \caption{Dependence of the probabilities for left- and right-handed braiding of a pair of DNA model molecules on tension $F$.
 Blue circles -solid line- represent the probability for the left-handed braiding, while red squares -broken line- represent the probability for right-handed braiding.
 Error bars represent standard error.}
@@ -600,7 +627,7 @@ Additionally, the left-handed braiding probability increases as the interaction 
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.6\textwidth]{brD_br_gr.pdf}
+\includegraphics[width=.5\textwidth]{brD_br_gr.pdf}
 \caption{Dependence of the probabilities for left- and right-handed braiding of a pair of DNA model molecules on DNA-DNA attractive interaction $D_{DNA}$.
 Blue circles -solid line- represent the probability for the left-handed braiding, while red squares -broken line- represent the probability for right-handed braiding.
 Error bars represent standard error.}
@@ -608,6 +635,23 @@ Error bars represent standard error.}
 \end{figure}
 
 \section{Conclusions}
+I have followed the studied paper that had investigated the elastic mechanisms of the selection of chirality in wrapping, crossover, and braiding of DNA based on a coarse-grained model and I have tried to reproduce their results.
+
+The DNA model has consisted of two elastic chains that mutually intertwine in a right-handed manner forming a double-stranded helix with the distinction between major and minor grooves.
+The model has been inclined to writhe in the left direction, even if the potential has no have asymmetric term: this was a consequence of the right-handed helix.
+The left-handed wrapping has been statistically preferred around spherical core particle and uniform rod.
+Monte Carlo simulations have suggested that two juxtaposed DNA molecules can braid each other spontaneously under moderate attractive interactions with the preference for left-handed braiding.
+
+In general my simulations have reproduced their results, but in some cases there have been some discrepancies.
+The peaks that I have founded in probability distributions of wrapping number $W$ and braiding number $B$ are not the same founded in the paper.
+This suggest that the potential landscape has not been so regular and there have been plenty of attractor conformations that the model could take on.
+The biggest discrepancy regards Fig.~\ref{fig:braF_pr}.
+In the paper the left-handed probability has decreased as the force has increased; in my simulations the behaviour has not been so clear and there have been more fluctuations and irregularities.
+
+The study has highlighted almost exclusively the roles of asymmetric bend-writhe elasticity of DNA in the formation of higher-order structures, but it has some limitations.
+It has used limited degrees of freedom, e.i. bending, dihedral and twist angles, but in reality may other internal degrees of freedom could also couple each other giving rise to more complex behaviours.
+In addition, the constant used to determine bonding and bending energy (Eq.~\ref{eq:bond} and~\ref{eq:bend}), $K_{bond}$ and $K_{bend}$ have been determined to approximate as better as they could the bending persistence length  of real DNA, but they could be evaluated better.
+Almost all the energy potential have been Morse potential: in reality the Coulomb potential had been the correct one, but it would have been to computational expensive.
 
 \clearpage
 \addcontentsline{toc}{section}{\refname}
