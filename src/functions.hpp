@@ -55,13 +55,13 @@ bool nearby(Coordinates<T> const& base, Coordinates<T> const& core) {
 }
 
 template <typename T>
-Coordinates<T> avg_norm(std::span<Coordinates<T>> const& coordinates) {
+Coordinates<T> avg(std::span<Coordinates<T>> const& coordinates) {
   Coordinates<T> avg;
   for (auto const& c : coordinates) {
     avg += c;
   }
   avg = avg / coordinates.size();
-  return avg / (avg.norm());
+  return avg;
 }
 
 template <typename T>
@@ -85,7 +85,9 @@ double chirality(std::vector<int> const& indexs,
                 % (dna[indexs[i-r]+1].central() - dna[indexs[i-r]].central()));
     tail.push_back(dna[indexs[i - r]].central());
   }
-  return (avg_norm<T>(m) * (avg_norm<T>(tail) - avg_norm<T>(head)));
+  auto const m_avg = avg<T>(m);
+  auto const r_avg = avg<T>(tail) - avg<T>(head);
+  return ((m_avg / m_avg.norm()) * (r_avg / r_avg.norm()));
 }
 
 template <typename T>
