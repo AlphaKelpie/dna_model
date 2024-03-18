@@ -48,9 +48,9 @@ def plot_p() :
   if p == "energy" :
     ax.set_ylabel('Energy (pNnm)', fontdict=axs_style)
   elif p == "wrapping" :
-    ax.set_ylabel('Wrapping', fontdict=axs_style)
+    ax.set_ylabel('Wrapping W', fontdict=axs_style)
   elif p == "chirality" :
-    ax.set_ylabel('Chirality', fontdict=axs_style)
+    ax.set_ylabel('Chirality C', fontdict=axs_style)
   # ax.legend()
   plt.savefig(f"../fig/hist_{p}.png", bbox_inches='tight')
   plt.savefig(f"../fig/hist_{p}.pdf", bbox_inches='tight')
