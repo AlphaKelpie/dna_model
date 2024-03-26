@@ -3,18 +3,24 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
   // number of basis
   int n = 100;
   // Read parameters from file
-  std::ifstream file("data.txt");
-  if (file.is_open()) {
-    file >> n;
-    file.close();
+  if (argc == 2) {
+    std::ifstream file("data.txt");
+    if (file.is_open()) {
+      file >> n;
+      file.close();
+    } else {
+      std::cerr << "Default parameters\n";
+    }
   } else {
-    std::cerr << "Unable to open file\n";
+    std::cerr << "Default parameters\n";
   }
+
   std::cout << std::fixed << std::setprecision(6);
+  
   std::vector<Base<double>> dna;
   dna.push_back(Base<double>(0., 0., 0.));
   dna.push_back(Base<double>(0., 0., psi_0));

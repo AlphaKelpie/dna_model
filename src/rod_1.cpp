@@ -21,13 +21,17 @@ int main(int argc, char* argv[]) {
   double sigma_rod = 2.1;
 
   // Read parameters from file
-  std::ifstream file("data_rod_1_" + std::string(argv[1]) + ".txt");
-  if (file.is_open()) {
-    file >> n;
-    file >> epochs;
-    file >> path;
-    file >> sigma_rod;
-    file.close();
+  if (argc == 2) {
+    std::ifstream file("data_rod_1_" + std::string(argv[1]) + ".txt");
+    if (file.is_open()) {
+      file >> n;
+      file >> epochs;
+      file >> path;
+      file >> sigma_rod;
+      file.close();
+    } else {
+      std::cerr << "Default parameters\n";
+    }
   } else {
     std::cerr << "Default parameters\n";
   }

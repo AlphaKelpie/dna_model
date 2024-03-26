@@ -6,21 +6,26 @@
 #include "base.hpp"
 #include "functions.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
   // number of basis
   int n = 100;
   // path
   std::string path = "./bend_writhe/";
 
   // Read parameters from file
-  std::ifstream file("data_bend.txt");
-  if (file.is_open()) {
-    file >> n;
-    file >> path;
-    file.close();
+  if (argc == 2) {
+    std::ifstream file("data_bend.txt");
+    if (file.is_open()) {
+      file >> n;
+      file >> path;
+      file.close();
+    } else {
+      std::cerr << "Default parameters\n";
+    }
   } else {
     std::cerr << "Default parameters\n";
   }
+  
   std::cout << std::fixed << std::setprecision(6);
   
   // simulations for dna graphics

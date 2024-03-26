@@ -24,6 +24,7 @@ def function(i) :
             run([OUTPUT, str(i)], stdout=PIPE, stderr=PIPE, check=True)
 
 if __name__ == "__main__" :
+    send_email("Inizio esecuzione", f"L'esecuzione_del_programma_{FILE}_e'_iniziata")
     start = datetime.now()
     run(COMPILE, check=True)
     
@@ -35,4 +36,5 @@ if __name__ == "__main__" :
     end = datetime.now()
     text = "L'esecuzione_del_programma_" + FILE + "_e'_avvenuta_con_successo"
     send_email("Fine esecuzione", text)
-    print(text, "\nÈ iniziato alle ", start.strftime('%H:%M:%S'), "\ne si è concluso alle ", end.strftime('%H:%M:%S'), ".\n")
+    print(text, "\nÈ iniziato alle ", start.strftime('%H:%M:%S'),
+          "\ne si è concluso alle ", end.strftime('%H:%M:%S'), ".\n")

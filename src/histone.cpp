@@ -21,13 +21,17 @@ int main(int argc, char* argv[]) {
   std::string path = "./histone/";
 
   // Read parameters from file
-  std::ifstream file("data_histone_" + std::string(argv[1]) + ".txt");
-  if (file.is_open()) {
-    file >> n;
-    file >> epochs;
-    file >> path;
-    file >> histone.x_ >> histone.y_ >> histone.z_;
-    file.close();
+  if (argc == 2) {
+    std::ifstream file("data_histone_" + std::string(argv[1]) + ".txt");
+    if (file.is_open()) {
+      file >> n;
+      file >> epochs;
+      file >> path;
+      file >> histone.x_ >> histone.y_ >> histone.z_;
+      file.close();
+    } else {
+      std::cerr << "Default parameters\n";
+    }
   } else {
     std::cerr << "Default parameters\n";
   }
