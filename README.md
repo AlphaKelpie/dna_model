@@ -1,6 +1,10 @@
 # dna_model
 Reproduce the code used in Tomohiro Yanao et al. paper to create a DNA structure model.
 
+[![Standard](https://img.shields.io/badge/c%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
+[![Standard](https://img.shields.io/badge/Python-3.10-red.svg)](https://www.python.org)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 ## Abstract
 In a paper of the 2015, Tomohiro Yanao, Sosuke Sano and Kenichi Yoshikawa have improved their previously model of the DNA double helix structure.
 They have implemented this model to analyse DNA wrapping, crossover, and braiding, that are of fundamental interest on genome packaging, gene regulation, and enzyme recognition.
@@ -36,7 +40,7 @@ The header files regard:
 - ```functions.hpp```: all the functions used in all the simulations;
 - ```base.hpp```: class of a base-pairs. It represents the backbone structure and the two sugar-phosphate chains;
 - ```coordinates.hpp```: structure of the coordinates used for backbone structure and the two sugar-phosphate chains;
-- ```òutputs.hpp```: structure used for energy, wrapping and chirality;
+- ```outputs.hpp```: structure used for energy, wrapping and chirality;
 
 ```tqdm.hpp``` and ```èigen-3.4.0``` are imported libraries, so thank you for [tqdm](https://github.com/mraggi/tqdm-cpp) and [eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page).
 
@@ -56,3 +60,17 @@ You must add your gmail account with a "app password" (see [italian](https://sup
 ### Figures
 All the python scripts that end with ```*_fig.py``` creates figures from the outputs of the simulations.
 Check that all the folders exist and are correct.
+
+## Citation
+
+If you find the code in this repository useful and you use it for any purpose, please consider citing it
+
+```BibTeX
+@misc{dna_model,
+  author = {Rondini, Tommaso},
+  title = {DNA coarse-grain elastic model to reproduce characteristics of higher-order structures},
+  year = {2024},
+  publisher = {GitHub},
+  howpublished = {\url{https://github.com/AlphaKelpie/dna_model}}
+}
+```
