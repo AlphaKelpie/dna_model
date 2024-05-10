@@ -1,4 +1,5 @@
 # dna_model
+
 Reproduce the code used in Tomohiro Yanao et al. paper to create a DNA structure model.
 
 [![Standard](https://img.shields.io/badge/c%2B%2B-20-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B#Standardization)
@@ -6,6 +7,7 @@ Reproduce the code used in Tomohiro Yanao et al. paper to create a DNA structure
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 ## Abstract
+
 In a paper of the 2015, Tomohiro Yanao, Sosuke Sano and Kenichi Yoshikawa have improved their previously model of the DNA double helix structure.
 They have implemented this model to analyse DNA wrapping, crossover, and braiding, that are of fundamental interest on genome packaging, gene regulation, and enzyme recognition.
 The study has explored elastic mechanisms for the selection of these DNA phenomena based on a coarse-grained model.
@@ -22,7 +24,9 @@ Some differences happen, maybe due to statistical issues and to a complex landsc
 To see my report and all the all quotations, see ```report.pdf```
 
 ## Code
+
 ### Simulations
+
 In ```src``` directory there is the code.
 
 The program to make simulations is in ```c++ 20``` and different cpp files performe different simulations:
@@ -51,6 +55,7 @@ g++ -std=c++2a -I ./eigen-3.4.0 <file_name>
 ```
 
 ### Perform simulations
+
 I have written some python scripts to perform the repeated simulation parallelized.
 Their names are the same of the cpp file, but for ```brand.cpp``` there are two: ```brand_F.py``` for section 3.4 and ```brand_D.py``` for section 3.5.
 You need ```subprocess```, ```datetime```, and ```multiprocessing```.
@@ -58,6 +63,7 @@ You need ```subprocess```, ```datetime```, and ```multiprocessing```.
 You must add your gmail account with a "app password" (see [italian](https://support.google.com/mail/answer/185833?hl=it-419) and [english](https://support.google.com/accounts/answer/185833?hl=en) Google support pages), and the recipient.
 
 ### Figures
+
 All the python scripts that end with ```*_fig.py``` creates figures from the outputs of the simulations.
 Check that all the folders exist and are correct.
 
